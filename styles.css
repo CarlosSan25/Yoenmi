@@ -1,0 +1,21 @@
+thead tr th { 
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #ffffff;
+}
+.menu-item{
+    width: fit-content !important;
+}
+.menu-item>a{
+    text-decoration: none;
+    color:white;
+    position: sticky;
+}
+
+.menu-item>a:hover{
+    color: black;
+}
+.items-cont{
+    width: fit-content;
+}

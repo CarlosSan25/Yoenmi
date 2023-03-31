@@ -1,5 +1,9 @@
-<?php include("header.php"); ?>
-<body>
+<?php
+include("header.php");
+if(!empty($_SESSION["usuario"])){
+    header("Location: welcome.php");
+}
+?>
     <div class="d-flex flex-column mt-5 justify-content-center align-items-center container">
         <h1 class="mb-4">Inicio de sesión</h1>
         <form class="d-flex flex-column" method="POST" action="controllers/login.php">

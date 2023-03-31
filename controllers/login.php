@@ -18,7 +18,9 @@ if($input_username == NULL || $input_password == NULL){
     if($pass != NULL){
         $phash = new Password;
         if($phash->verify($input_password,$pass["password"])){
-            header("Location: ../welcome.php?user=$input_username");
+            session_start();
+            $_SESSION["usuario"] = $input_username;
+            header("Location: ../welcome.php");
         } else{
             $error="Contraseña incorrecta.";
             header("Location: ../login.php?error=$error&user=$input_username");
