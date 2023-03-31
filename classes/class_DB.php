@@ -1,5 +1,7 @@
 <?php
 
+require("class_password.php");
+
 // Database Class
 
 class DB{
@@ -36,6 +38,19 @@ class DB{
         return $result;
     }
 
+    public function getPass($username){
+        $stmt = $this->conn->prepare("SELECT password FROM users WHERE username='$username';");
+        $stmt->execute();
+        $password = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $password;
+    }
+
+    public function insertUser($n, $u, $p){
+        $phash = new Password;
+        $password = $phash->hash($p);
+        $stmt = $this->conn->prepare("INSERT INTO users (nombre, username, password) VALUES ('$n','$u','$password');");
+        return $stmt->execute();
+    }
 }
 
 ?>

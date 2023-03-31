@@ -1,10 +1,10 @@
 <?php
 
-//////////////////////  File for connect the database.  /////////////////////////////////////////
+//////////////////////  Database connection.  /////////////////////////////////////////
 
 require("classes\class_DB.php");
 
-// Database connection data
+// Database connection config
 
 define('dbhost','localhost');
 define('dbname','yoenmi');
