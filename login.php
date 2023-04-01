@@ -1,11 +1,6 @@
-<?php
-include("header.php");
-if(!empty($_SESSION["usuario"])){
-    header("Location: welcome.php");
-}
-?>
-    <div class="d-flex flex-column mt-5 justify-content-center align-items-center container">
-        <h1 class="mb-4">Inicio de sesión</h1>
+<?php include("header-login.php"); ?>
+    <div class="login d-flex flex-column p-4 justify-content-center align-items-center">
+        <h1 class="mb-4" style="color:black;">Inicio de sesión</h1>
         <form class="d-flex flex-column" method="POST" action="controllers/login.php">
             <label for="username">Nombre de usuario</label>
             <input name="username" id="username" type="text" <?php if(isset($_GET['user'])){echo "value=$_GET[user]";} ?> ></input>
@@ -20,10 +15,8 @@ if(!empty($_SESSION["usuario"])){
             }
             ?>
             <div class="mt-3">¿Aún no tienes cuenta? <a href="register.php">Regístrate</a></div>
-            <button id="submit" type="submit" class="btn btn-success mt-3">Enviar</button>
+            <button id="submit" type="submit" class="send-btn mt-3">Enviar</button>
         </form>
     </div>
-
-
 </body>
 </html>

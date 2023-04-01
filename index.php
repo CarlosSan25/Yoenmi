@@ -1,5 +1,7 @@
 <?php
 
+// Silence Is Golden.
+
 if(isset($_GET["user"])){
     header("Location: welcome.php?user=".$_GET["user"]);
 } else{
