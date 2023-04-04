@@ -2,8 +2,8 @@
 
 // Silence Is Golden.
 
-if(isset($_GET["user"])){
-    header("Location: welcome.php?user=".$_GET["user"]);
+if(isset($COOKIE["usuario"])){
+    header("Location: welcome.php?user=".$COOKIE["user"]);
 } else{
     header("Location: login.php");
 }

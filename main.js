@@ -1,23 +1,22 @@
 window.onload = function(){
-    document.onmousemove = function(e){
-        var clouds = document.querySelectorAll(".cloud");
+let checkbox = document.getElementById("light_mode");
+let body = document.getElementsByTagName("body");
 
-        var x = e.clientX/50 + 970;
-        var y = e.clientY/50 +100;
+if(checkbox.checked){ 
+    body[0].style.backgroundColor = "#1d1e22";
+    body[0].style.color = "white";
+} else{
+    body[0].style.backgroundColor = "white";
+    body[0].style.color = "black";
+}
 
-        clouds[0].style.top = y + "px";
-        clouds[0].style.left = x + "px";
-
-        var x = e.clientX/50 + 300;
-        var y = e.clientY/50 + 20;
-
-        clouds[1].style.top = y + "px";
-        clouds[1].style.left = x + "px";
-        
-        var x = e.clientX/50 + 100;
-        var y = e.clientY/50 + 500;
-
-        clouds[2].style.top = y + "px";
-        clouds[2].style.left = x + "px";
+checkbox.addEventListener('change', function (){
+    if(checkbox.checked){ 
+        body[0].style.backgroundColor = "#1d1e22";
+        body[0].style.color = "white";
+    } else{
+        body[0].style.backgroundColor = "white";
+        body[0].style.color = "black";
     }
+})
 }

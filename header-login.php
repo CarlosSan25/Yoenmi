@@ -1,6 +1,5 @@
 <?php
-session_start();
-if(!empty($_SESSION["usuario"])){
+if(isset($_COOKIE["usuario"])){
     header("Location: welcome.php");
 }
 ?>
@@ -13,7 +12,7 @@ if(!empty($_SESSION["usuario"])){
     <link rel="shortcut icon" href="media\favicon.ico" />
     <link rel="stylesheet" href="styles.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="main.js"></script>
+    <script src="login.js"></script>
     <title>Yoenmi</title>
 </head>
 <body>
@@ -22,16 +21,17 @@ if(!empty($_SESSION["usuario"])){
         <div class='air air2'></div>
         <div class='air air3'></div>
         <div class='air air4'></div>
+        <video autoplay muted loop class="video-back">
+        <source src="media\back.mov" type="video/mp4">
+        </video>
         <div class="row">
             <div class="col-3"></div>
             <div class="col-9" style="position: relative;">
-                <img src="media\cloud.png" class="cloud cloud1"></img>
-                <img src="media\cloud2.png" class="cloud cloud2"></img>
-                <img src="media\cloud3.png" class="cloud cloud3"></img>
                 <div class="d-flex login-main">
                     <img src="media\Logo Aplicación Blanco.png"></img>
                     <h1>Yoenmi</h1>
                 </div>
             </div>
         </div>
+        <div class="copyright-login"><small>Yoenmi &copy; Copyright 2023</small></div>
     </section>

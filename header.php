@@ -1,3 +1,8 @@
+<?php
+    if(!isset($_COOKIE["usuario"])){
+        header("Location: login.php");
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -16,11 +21,6 @@
                 <div class="menu-item col-4" scope="col"><a href="login.php">Iniciar Sesión</a></div>
                 <div class="menu-item col-4" scope="col"><a href="register.php">Registrarse</a></div>
                 <div class="menu-item col-4" scope="col"><a href="welcome.php">Welcome</a></div>
-                <?php
-                session_start();
-                if(!empty($_SESSION["usuario"])){
-                    echo "<div class='ms-3 menu-item' scope='col'><a style='color:red;' href='session_close.php'>Cerrar Sesión</a></div>";
-                }
-                ?>
+                <div class='ms-3 menu-item' scope='col'><a style='color:red;' href='session_close.php'>Cerrar Sesión</a></div>
             </div>
     </header>
