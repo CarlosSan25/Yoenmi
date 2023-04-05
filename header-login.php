@@ -22,7 +22,7 @@ if(isset($_COOKIE["usuario"])){
         <div class='air air3'></div>
         <div class='air air4'></div>
         <video autoplay muted loop class="video-back">
-        <source src="media\back.mov" type="video/mp4">
+        <source src="media\back.mp4" type="video/mp4">
         </video>
         <div class="row">
             <div class="col-3"></div>

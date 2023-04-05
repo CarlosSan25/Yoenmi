@@ -68,6 +68,9 @@
   }
 
 /* General CSS */
+body{
+  overflow: hidden;
+}
 form{
   gap: 15px;
   width: 70%;
@@ -474,4 +477,20 @@ thead tr th {
 
 .top-right img{
   width: 25px !important;
+}
+
+.dropdown-toggle::after{
+  display: none !important;
+}
+
+.dropdown-menu{
+  right: 0;
+  top: 55px;
+  background-color: rgb(29, 30, 34) !important;
+  border: solid 1px #686864 !important;
+  border-radius: 5px !important;
+}
+
+.dropdown-item{
+  color: white !important;
 }

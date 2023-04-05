@@ -11,6 +11,7 @@ if(!isset($_COOKIE["usuario"])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="jquery-3.6.4.min.js"></script>
     <script src="main.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Welcome</title>
@@ -59,7 +60,16 @@ if(!isset($_COOKIE["usuario"])){
                 </div>
                 <div class="col-1"></div>
                 <div class="col-1 top-right">
-                    <div class="options" style="width:45px;"><img src="media\ajustes.png" alt=""></div>
+                    <div class="dropdown" style="width:45px;">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width:45px; position:relative; cursor:pointer;">
+                            <img src="media\ajustes.png" alt="">
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <li><a class="dropdown-item" href="session_close.php" style="color:red !important;">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

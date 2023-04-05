@@ -45,10 +45,10 @@ class DB{
         return $password;
     }
 
-    public function insertUser($n, $u, $p){
+    public function insertUser($n, $u, $p, $i){
         $phash = new Password;
         $password = $phash->hash($p);
-        $stmt = $this->conn->prepare("INSERT INTO users (nombre, username, password) VALUES ('$n','$u','$password');");
+        $stmt = $this->conn->prepare("INSERT INTO users (nombre, username, password, image) VALUES ('$n','$u','$password', '$i');");
         return $stmt->execute();
     }
 }
