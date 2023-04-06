@@ -51,6 +51,24 @@ class DB{
         $stmt = $this->conn->prepare("INSERT INTO users (nombre, username, password, image) VALUES ('$n','$u','$password', '$i');");
         return $stmt->execute();
     }
+
+    public function userExists($username){
+        $query = "SELECT username FROM users WHERE username='$username';";
+        $result = $this->query($query);
+        if(empty($result)){return false;} else {return true;}
+    }
+
+    public function getUserData($username){
+        $query = "SELECT * FROM users WHERE username='$username';";
+        $result = $this->query($query);
+        return $result;
+    }
+
+    public function insertPost($user_id, $content, $image){
+        $query = "INSERT INTO posts (user_id, content, image) VALUES ('$user_id', '$content', '$image');";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
 }
 
 ?>

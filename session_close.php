@@ -2,9 +2,11 @@
 
 if(isset($_COOKIE["usuario"])){
     setcookie("usuario","",time()-60, '/');
-    header("Location: login.php");
+    session_destroy();
+    header("Location: views\login\login.php");
 }else{
-    header("Location: login.php");
+    session_destroy();
+    header("Location: views\login\login.php");
 }
 
 ?>

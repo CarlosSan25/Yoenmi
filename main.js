@@ -45,6 +45,5 @@ window.onload = function(){
         }else if($(".dropdown-menu").is(':hidden')){
                 $(".dropdown-menu").slideDown('slow');
         }
-    }
-    )
+    })
 }

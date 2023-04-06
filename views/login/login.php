@@ -1,7 +1,7 @@
 <?php include("header-login.php"); ?>
     <div class="login d-flex flex-column p-4 justify-content-center align-items-center">
         <h1 class="mb-4" style="color:black;">Inicio de sesión</h1>
-        <form class="d-flex flex-column" method="POST" action="controllers/login.php">
+        <form class="d-flex flex-column" method="POST" action="../../controllers/login.php">
             <label for="username">Nombre de usuario</label>
             <input name="username" id="username" type="text" <?php if(isset($_GET['user'])){echo "value=$_GET[user]";} ?> ></input>
             <label for="username" class="mt-3">Contraseña</label>

@@ -69,8 +69,9 @@
 
 /* General CSS */
 body{
-  overflow: hidden;
+  overflow-x: hidden;
 }
+
 form{
   gap: 15px;
   width: 70%;
@@ -258,7 +259,8 @@ thead tr th {
 
   .user{
     padding: 10px;
-    background-color: #686864;
+    background-color: transparent;
+    border: solid 1px #686864;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -268,6 +270,8 @@ thead tr th {
   .search{
     background-color: #686864;
     border-radius: 10px;
+    border: none;
+    padding: 10px;
   }
 
   .top{
@@ -493,4 +497,60 @@ thead tr th {
 
 .dropdown-item{
   color: white !important;
+}
+
+.logo-text{
+  font-size: 40px;
+  margin-left: 5px;
+  text-decoration: none;
+}
+
+a:link, a:visited, a:active {
+  text-decoration:none;
+  color: white;
+}
+
+.ico{
+  filter: invert(1);
+}
+
+.profile-pic{
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  background-size: cover;
+  background-position: center;
+}
+
+.active{
+  background-color: #4c4c48;
+}
+
+.mainframe{
+  padding: 30px;
+  background-color: #17181c;
+  height: 100vh;
+}
+
+.whats-new{
+  padding: 20px;
+  background-color: #1e1f23;
+  border-radius: 5px;
+}
+
+.weather{
+  background-color: #1e1f23;
+  border-radius: 5px;
+  padding: 20px;
+}
+.temp{
+  font-size: 70px;
+  line-height: 60px;
+}
+.weather img{
+  width: 100px;
+}
+
+.locat{
+  font-size: 35px;
 }

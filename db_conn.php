@@ -13,6 +13,7 @@ define('dbpass', 'OA!7WInC8qBu3TGw');
 
 
 // Creating new database connection
+
 $conn = new DB(dbhost,dbname,dbuser,dbpass);
 
 $conn->dbconn();
