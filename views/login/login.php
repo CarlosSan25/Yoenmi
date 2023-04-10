@@ -14,6 +14,7 @@
                 echo "<div class='alert alert-success' role='alert'>". $_GET["success"]."</div>";
             }
             ?>
+            <label for="remember"><input class="me-2" type="checkbox" id="remember" name="remember"></input>Recuérdame</label>
             <div class="mt-3">¿Aún no tienes cuenta? <a href="register.php">Regístrate</a></div>
             <button id="submit" type="submit" class="send-btn mt-3">Enviar</button>
         </form>

@@ -1,8 +1,6 @@
 <?php
-if(!isset($_COOKIE["usuario"])){
-    setcookie("usuario", "", time()-1);
-    header("Location: views/login/login.php");
-} elseif(!isset($_SESSION["usuario"])){
+
+if(!isset($_SESSION["usuario"])){
     require('db_conn.php');
     session_start();
     $data = $conn->getUserData($_COOKIE["usuario"]);
@@ -35,7 +33,7 @@ if(!isset($_COOKIE["usuario"])){
                 </a>
             </div>
             <div class="user">
-                <div class="profile-pic" style="background-image:url(<?php echo $_SESSION['image']; ?>)"></div>
+                <div class="profile-pic" style="background-image:url('<?php echo $_SESSION['image']; ?>')"></div>
                 <span class="name"><?php echo $_SESSION['name']; ?></span><span class="username">@<?php echo $_COOKIE["usuario"]; ?></span>
             </div>
             <div class="menu-left">
@@ -53,7 +51,7 @@ if(!isset($_COOKIE["usuario"])){
                 <div class="col-2 d-flex top-right">
                     <div class="bell"><img class="ico" src="media\notificacion.png" alt=""></div>
                     <div class="not"><img class="ico" src="media\mensaje.png" alt=""></div>
-                    <div class="profile-pic profile" style="width:45px !important; height:45px !important;background-image: url(<?php echo $_SESSION['image']; ?>)"></div>
+                    <div class="profile-pic profile" style="width:45px !important; height:45px !important;background-image: url('<?php echo $_SESSION['image']; ?>')"></div>
                 </div>
                 <div class="col-1"></div>
                 <div class="col-1 d-flex" style="margin-top: 5px;">

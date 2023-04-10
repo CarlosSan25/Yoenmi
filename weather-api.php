@@ -3,7 +3,7 @@
 $curl = curl_init();
 
 curl_setopt_array($curl, [
-	CURLOPT_URL => "https://weatherapi-com.p.rapidapi.com/current.json?q=Madrid",
+	CURLOPT_URL => "https://weatherapi-com.p.rapidapi.com/current.json?q=38.35%2C-0.4814900",
 	CURLOPT_RETURNTRANSFER => true,
 	CURLOPT_FOLLOWLOCATION => true,
 	CURLOPT_ENCODING => "",

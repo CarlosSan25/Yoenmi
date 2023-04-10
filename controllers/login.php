@@ -7,6 +7,7 @@ require("../db_conn.php");
 $input_username = $_POST["username"];
 $input_password = $_POST["password"];
 
+
 // Validate data
 if($input_username == NULL || $input_password == NULL){
     $error="Debes rellenar todos los campos.";
@@ -18,7 +19,11 @@ if($input_username == NULL || $input_password == NULL){
     if($pass != NULL){
         $phash = new Password;
         if($phash->verify($input_password,$pass["password"])){
-            setcookie("usuario", $input_username, time() + 2635200, '/');
+            if(isset($_POST["remember"])){
+                setcookie("usuario", $input_username, time() + 2635200, '/');
+            }else{
+                setcookie("usuario", $input_username, 0, '/');
+            }
             session_start();
             $data = $conn->getUserData($input_username);
             $_SESSION['name'] = $data['Nombre'];

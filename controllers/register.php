@@ -17,12 +17,15 @@ if($input_username == NULL || $input_password == NULL || $input_name == NULL || 
     // Test if the username already exists
     if(!$conn->userExists($input_username)){
         
-        // Path where store user image
-        $path = "../media/user-uploads/" . basename($input_image['name']);
-        $absolute_path = "http://localhost/yoenmi/media/user-uploads/" . basename($input_image['name']);
-        
-        // Store the image
-        if(move_uploaded_file($input_image['tmp_name'], $path)) {
+        // Obtain the extension of the image
+        $new_name = explode(".",$input_image['name']);
+
+        // Make the path to the Database & for storage
+        $path = "../media/user-uploads/" . date('d.m.Y.H.i.s') . "." . end($new_name);
+        $absolute_path = "http://localhost/yoenmi/media/user-uploads/" . date('d.m.Y.H.i.s') . "." . end($new_name);
+
+        // Storage the image
+        if(move_uploaded_file($input_image['tmp_name'], $path)){
         
             // Query to insert the user data
             $stmt = $conn->insertUser($input_name, $input_username, $input_password, $absolute_path);

@@ -242,6 +242,7 @@ thead tr th {
     gap: 10px;
     align-items: baseline;
     border-radius: 5px;
+    cursor: pointer;
   }
 
   .menu-left>div>img{
@@ -254,7 +255,7 @@ thead tr th {
   }
 
   .menu-left>div:hover{
-    background-color: #686864;
+    background-color: #0160b157;
   }
 
   .user{
@@ -523,7 +524,7 @@ a:link, a:visited, a:active {
 }
 
 .active{
-  background-color: #4c4c48;
+  background-color: #0160b157;
 }
 
 .mainframe{
@@ -539,18 +540,38 @@ a:link, a:visited, a:active {
 }
 
 .weather{
-  background-color: #1e1f23;
+  background: rgba(255, 255, 255, 0.26);
+  text-shadow: 2px 2px 2px black;
+  backdrop-filter: blur(8.3px);
+  -webkit-backdrop-filter: blur(8.3px);
   border-radius: 5px;
   padding: 20px;
+  overflow: hidden;
 }
+
+#back-weather{
+  top: 0;
+  position: absolute;
+  left: 0;
+  height: 100%;
+  z-index: -1;
+  filter: blur(5px);
+}
+
 .temp{
   font-size: 70px;
   line-height: 60px;
 }
+
 .weather img{
   width: 100px;
 }
 
 .locat{
-  font-size: 35px;
+  font-size: 45px;
+  line-height: 75px;
+}
+
+.logo-text:hover{
+  color: white;
 }
