@@ -34,8 +34,16 @@ window.onload = function(){
             element.style.boxShadow = "none";
         })
         qs(".left-side").style.boxShadow = "3px 1px 5px -2px black";
+        var posts = qsA(".post");
+        posts.forEach(function(element){
+            element.classList.add("post-dark");
+        });
+        var see_likes = qsA("#see-likes");
+        see_likes.forEach(function(element){
+            element.style.filter = 'invert(1)';
+        });
         checkbox.checked = true;
-    } else if(cookie == 'light'){
+    } else if(cookie == 'light' || cookie == null){
         body[0].style.backgroundColor = "white";
         body[0].style.color = "black";
         document.cookie = "color_mode=light;expires="+time;
@@ -55,6 +63,14 @@ window.onload = function(){
             element.style.boxShadow = "1px 0.5px 4px gray";
         })
         qs(".left-side").style.boxShadow = "3px 1px 5px -2px gray";
+        var posts = qsA(".post");
+        posts.forEach(function(element){
+            element.classList.add("post-light");
+        });
+        var see_likes = qsA("#see-likes");
+        see_likes.forEach(function(element){
+            element.style.filter = 'invert(0)';
+        });
         checkbox.checked = false;
     }
 
@@ -86,6 +102,14 @@ window.onload = function(){
                 element.style.boxShadow = "none";
             })
             qs(".left-side").style.boxShadow = "3px 1px 5px -2px black";
+            var posts = qsA(".post");
+            posts.forEach(function(element){
+                element.classList.replace("post-light","post-dark");
+            });
+            var see_likes = qsA("#see-likes");
+            see_likes.forEach(function(element){
+                element.style.filter = 'invert(1)';
+            });
         } else{
             body[0].style.backgroundColor = "white";
             body[0].style.color = "black";
@@ -106,6 +130,14 @@ window.onload = function(){
                 element.style.boxShadow = "1px 0.5px 4px gray";
             })
             qs(".left-side").style.boxShadow = "3px 1px 5px -2px gray";
+            var posts = qsA(".post");
+            posts.forEach(function(element){
+                element.classList.replace("post-dark","post-light");
+            });
+            var see_likes = qsA("#see-likes");
+            see_likes.forEach(function(element){
+                element.style.filter = 'invert(0)';
+            });
         }
     })
 
@@ -120,9 +152,29 @@ window.onload = function(){
 
     $(".dropdown-toggle").click(function(){
         if($(".dropdown-menu").is(':visible')){
-            $(".dropdown-menu").slideUp('slow');
+            $(".dropdown-menu").slideUp('fast');
         }else if($(".dropdown-menu").is(':hidden')){
-                $(".dropdown-menu").slideDown('slow');
+                $(".dropdown-menu").slideDown('fast');
         }
     })
+
+    $("#home").click(function(){
+        $(location).attr('href','welcome.php');
+    });
+
+    $("#explore").click(function(){
+        $(location).attr('href','explore.php');
+    });
+
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 300) {
+            $('a.scroll-top').fadeIn('slow');
+        } else {
+            $('a.scroll-top').fadeOut('slow');
+        }
+    });
+    $('a.scroll-top').click(function(event) {
+        event.preventDefault();
+        $('html, body').animate({scrollTop: 0});
+    });
 }

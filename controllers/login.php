@@ -27,7 +27,7 @@ if($input_username == NULL || $input_password == NULL){
             session_start();
             $data = $conn->getUserData($input_username);
             $_SESSION['name'] = $data['Nombre'];
-            $_SESSION['image'] = $data['image'];
+            $_SESSION['image'] = $data['avatar'];
             $_SESSION['id'] = $data['id'];
             header("Location: ../welcome.php");
         } else{

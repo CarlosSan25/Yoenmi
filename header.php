@@ -1,13 +1,15 @@
 <?php
 
-if(!isset($_SESSION["usuario"])){
-    require('db_conn.php');
-    session_start();
-    $data = $conn->getUserData($_COOKIE["usuario"]);
-    $_SESSION['name'] = $data['Nombre'];
-    $_SESSION['image'] = $data['image'];
-    $_SESSION['id'] = $data['ID'];
-}
+if(isset($_COOKIE["usuario"])){
+    if(!isset($_SESSION["usuario"])){
+        require('db_conn.php');
+        session_start();
+        $data = $conn->getUserData($_COOKIE["usuario"]);
+        $_SESSION['name'] = $data['Nombre'];
+        $_SESSION['image'] = $data['avatar'];
+        $_SESSION['id'] = $data['ID'];
+    }
+} else{ header("Location: views/login/login.php"); }
 
 ?>
 <!DOCTYPE html>
@@ -18,30 +20,40 @@ if(!isset($_SESSION["usuario"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <script src="jquery-3.6.4.min.js"></script>
+    <script src="ajax.js"></script>
     <script src="main.js"></script>
     <link rel="icon" type="image/x-icon" href="media/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <title>Red Social - Yoenmi</title>
 </head>
 <body>
+    <div id="user_id" style="display: none;"><?php echo $_SESSION['id']; ?></div>
+    <a href="#" class="scroll-top" title="Ir arriba">
+        <img src="media/up.png" height="20px;"></img>
+    </a>
     <div class="row">
-        <div class="col-3 d-flex flex-column left-side" style="padding: 30px;height: 100vh;z-index:9;">
-            <div class="logo">
-                <a href="welcome.php" class="d-flex align-items-center">
-                    <img src="media\Logo Aplicación Blanco.png" width="70px" alt="">
-                    <span class="logo-text">Yoenmi</span>
-                </a>
-            </div>
-            <div class="user">
-                <div class="profile-pic" style="background-image:url('<?php echo $_SESSION['image']; ?>')"></div>
-                <span class="name"><?php echo $_SESSION['name']; ?></span><span class="username">@<?php echo $_COOKIE["usuario"]; ?></span>
-            </div>
-            <div class="menu-left">
-                <div class="d-flex active"><img class="ico" src="media\hogar.svg"><span>Home</span></div>
-                <div class="d-flex"><img class="ico" src="media\calendario.svg"><span>Latest</span></div>
-                <div class="d-flex"><img class="ico" src="media\globo.svg"><span>Explore</span></div>
-                <div class="d-flex"><img class="ico" src="media\hogar.svg"><span>News Feed</span></div>
-                <div class="d-flex"><img class="ico" src="media\hogar.svg"><span>Marketplace</span></div>
+        <div class="col-3 d-flex flex-column left-side" style="padding: 30px;">
+            <div class="d-flex flex-column" style="gap: 20px; width: 22vw; position:fixed;">
+                <div class="logo">
+                    <a href="welcome.php" class="d-flex align-items-center">
+                        <img src="media\Logo Aplicación Blanco.png" width="70px" alt="">
+                        <span class="logo-text">Yoenmi</span>
+                    </a>
+                </div>
+                <div class="user">
+                    <div class="profile-pic" style="background-image:url('<?php echo $_SESSION['image']; ?>')"></div>
+                    <span class="name"><?php echo $_SESSION['name']; ?></span><span class="username">@<?php echo $_COOKIE["usuario"]; ?></span>
+                </div>
+                <div class="menu-left">
+                    <div id="home" class="d-flex"><img class="ico" src="media\hogar.svg"><span>Home</span></div>
+                    <div id="latest" class="d-flex"><img class="ico" src="media\calendario.svg"><span>Latest</span></div>
+                    <div id="explore" class="d-flex"><img class="ico" src="media\globo.svg"><span>Explore</span></div>
+                    <div id="news" class="d-flex"><img class="ico" src="media\hogar.svg"><span>News Feed</span></div>
+                    <div id="market" class="d-flex"><img class="ico" src="media\hogar.svg"><span>Marketplace</span></div>
+                </div>
             </div>
         </div>
         <div class="col-9 d-flex flex-column">

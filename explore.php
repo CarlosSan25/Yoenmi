@@ -2,7 +2,7 @@
 require('header.php');
 ?>
             <script>
-                $("#home").addClass('active');
+                $("#explore").addClass('active');
             </script>
             <div class="row mainframe">
                 <div class="col-8">

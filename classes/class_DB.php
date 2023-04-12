@@ -48,7 +48,7 @@ class DB{
     public function insertUser($n, $u, $p, $i){
         $phash = new Password;
         $password = $phash->hash($p);
-        $stmt = $this->conn->prepare("INSERT INTO users (nombre, username, password, image) VALUES ('$n','$u','$password', '$i');");
+        $stmt = $this->conn->prepare("INSERT INTO users (nombre, username, password, avatar) VALUES ('$n','$u','$password', '$i');");
         return $stmt->execute();
     }
 
@@ -68,6 +68,54 @@ class DB{
         $query = "INSERT INTO posts (user_id, content, image) VALUES ('$user_id', '$content', '$image');";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
+    }
+
+    public function getPosts($user_id){
+        $query = "SELECT posts.*, users.Nombre, users.username, users.avatar FROM posts, users WHERE users.ID = '$user_id' AND users.ID = posts.user_id ORDER BY `date` DESC;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function getAllPosts(){
+        $query = "SELECT posts.*, users.Nombre, users.username, users.avatar FROM posts, users WHERE users.ID = posts.user_id ORDER BY `date` DESC;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function countLikes($post_id){
+        $query = "SELECT COUNT(post_id) FROM likes WHERE post_id = $post_id";
+        $result = $this->query($query);
+        return $result;
+    }
+
+    public function insertLike($post_id, $user_id){
+        $query = "INSERT INTO likes (user_id, post_id) VALUES ('$user_id', '$post_id');";
+        $stmt = $this->conn->prepare($query);
+        if($stmt->execute()){return true;} else {return false;}
+    }
+
+    public function deleteLike($post_id, $user_id){
+        $query = "DELETE FROM likes WHERE user_id = '$user_id' AND post_id = '$post_id';";
+        $stmt = $this->conn->prepare($query);
+        if($stmt->execute()){return true;} else {return false;}
+    }
+
+    public function comprobarLike($post_id, $user_id){
+        $query = "SELECT COUNT(post_id) FROM likes WHERE post_id = '$post_id' && user_id = '$user_id';";
+        $result = $this->query($query);
+        if($result['COUNT(post_id)']>0){return 1;} else {return 0;}
+    }
+
+    public function getLikes($post_id){
+        $query = "SELECT likes.date, users.Nombre, users.username, users.avatar FROM users, likes WHERE likes.user_id = users.ID AND likes.post_id = '$post_id' ORDER BY likes.date DESC;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 }
 
