@@ -91,11 +91,30 @@ thead tr th {
     position: sticky;
 }
 
+input{
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+}
+
 .menu-item>a:hover{
     color: black;
 }
 .items-cont{
     width: fit-content;
+}
+
+.inputwfoto{
+  width: 100%;
+  background: white;
+  border-radius: 5px;
+}
+
+.password{
+  width: 90%;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .login{
@@ -492,8 +511,8 @@ thead tr th {
 }
 
 .dropdown-menu{
-  right: 0;
-  top: 55px;
+  right: 75px;
+  top: 75px;
   background-color: rgb(29, 30, 34) !important;
   border: solid 1px #686864 !important;
   border-radius: 5px !important;
@@ -628,6 +647,39 @@ a:link, a:visited, a:active {
   padding: 3px 20px;
   border-radius: 5px;
   cursor: pointer;
+  position: relative;
+}
+
+.comments-button{
+  color: #ff7700;
+  font-size: 18px;
+  display: flex;
+  gap: 5px;
+  border: 1px solid;
+  width: fit-content;
+  padding: 3px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+}
+
+.comments-button:hover{
+  background-color: #8a400049;
+}
+
+.comments-button-opened{
+  background-color: #ff7700;
+  color: white;
+  border: none;
+}
+
+.comments-button-opened:hover{
+  background-color: #ff7700;
+  color: white;
+}
+
+.comments-button-opened>img{
+  filter: brightness(0) invert(1);
 }
 
 .like:hover{
@@ -649,6 +701,12 @@ a:link, a:visited, a:active {
 
 .text-content{
   font-size: 20px;
+}
+
+.see-likes{
+  position: absolute;
+  top: -15px;
+  left: 65px;
 }
 
 .modal{
@@ -688,4 +746,37 @@ a.scroll-top img {
 	position: relative;
 	top: 10px;
   filter: invert(1);
+}
+
+.comment-form{
+  padding: 20px;
+  position: relative;
+}
+
+.comment-form-line-bottom::after{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 50%;
+  border-bottom: solid 1px white;
+
+}
+
+.comment{
+  padding: 20px;
+  gap: 20px;
+  border-radius: 5px;
+  padding-left: 50px;
+}
+
+.comment>div:first-child{
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+.comment>div>div{
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }

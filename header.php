@@ -21,7 +21,6 @@ if(isset($_COOKIE["usuario"])){
     <link rel="stylesheet" href="styles.css">
     <script src="jquery-3.6.4.min.js"></script>
     <script src="ajax.js"></script>
-    <script src="main.js"></script>
     <link rel="icon" type="image/x-icon" href="media/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- jQuery Modal -->
@@ -81,10 +80,8 @@ if(isset($_COOKIE["usuario"])){
                 </div>
                 <div class="col-1"></div>
                 <div class="col-1 top-right">
-                    <div class="dropdown" style="width:45px;">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="width:45px; position:relative; cursor:pointer;">
+                    <div class="dropdown-toggle" style="width:45px;cursor:pointer;">
                             <img class="ico" src="media\ajustes.png" alt="">
-                        </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <li><a class="dropdown-item" href="#">Another action</a></li>
                             <li><a class="dropdown-item" href="#">Something else here</a></li>

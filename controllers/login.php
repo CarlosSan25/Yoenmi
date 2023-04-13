@@ -20,8 +20,10 @@ if($input_username == NULL || $input_password == NULL){
         $phash = new Password;
         if($phash->verify($input_password,$pass["password"])){
             if(isset($_POST["remember"])){
+                // If the user checked remember, store a cookie during a month
                 setcookie("usuario", $input_username, time() + 2635200, '/');
             }else{
+                // If user didnt checked remember, store a cookie during the session
                 setcookie("usuario", $input_username, 0, '/');
             }
             session_start();

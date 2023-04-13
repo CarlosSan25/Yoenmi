@@ -12,3 +12,16 @@ window.onload = function(){
         box.style.transform = `rotate3d(1,1,1,${angle}deg)`;
         })
 }
+
+let ojo = document.querySelector("#ojo-pass");
+let input = document.getElementById("password");
+
+ojo.addEventListener('click', function(){
+    if(input.type == "text"){
+        input.type = "password";
+        ojo.src = "http://localhost/yoenmi/media/ojo-pass.png";
+    } else{
+        input.type = "text";
+        ojo.src = "http://localhost/yoenmi/media/ojo-pass-no.png";
+    }
+});

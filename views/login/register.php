@@ -8,7 +8,7 @@
             <label for="username" class="mt-3">Nombre de usuario</label>
             <input name="username" id="username" type="text" <?php if(isset($_GET['user'])){echo "value=$_GET[user]";} ?>></input>
             <label for="username" class="mt-3">Contraseña</label>
-            <input name="password" id="password" type="password"></input>
+            <div class="inputwfoto"><input class="password" name="password" id="password" type="password"></input><img id="ojo-pass" style="margin:5px; cursor:pointer;" width=20px src='..\..\media\ojo-pass.png'></div>
             <label for="image" id="image">Imagen de usuario</label>
             <input type="file" class="form-control" id="image" name="image" accept="image/*">
             <?php
@@ -21,4 +21,5 @@
         </form>
     </div>
 </body>
+<script src="login.js"></script>
 </html>

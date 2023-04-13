@@ -117,6 +117,26 @@ class DB{
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function countComments($post_id){
+        $query = "SELECT COUNT(post_id) FROM comments WHERE post_id = $post_id";
+        $result = $this->query($query);
+        return $result;
+    }
+
+    public function getComments($post_id){
+        $query = "SELECT comments.ID, comments.date, comments.content, comments.image, users.Nombre, users.username, users.avatar FROM users, comments WHERE comments.user_id = users.ID AND comments.post_id = '$post_id' ORDER BY comments.date ASC;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function insertComment($post_id, $user_id, $content, $image){
+        $query = "INSERT INTO comments (post_id, user_id, content, image) VALUES ('$post_id','$user_id', '$content', '$image');";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
 }
 
 ?>

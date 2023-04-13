@@ -5,7 +5,7 @@ window.onload = function(){
     let expireTime = time.getTime() + 86400000*30.5;
     time.setTime(expireTime);
 
-    // Funcion para leer las cookies
+    // Function to read a stored cookie
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -13,8 +13,18 @@ window.onload = function(){
         return matches ? decodeURIComponent(matches[1]) : undefined;
     }
 
+    // Functions to simplify query selector & query selector All 
+    function qs(query){
+        return document.querySelector(query);
+    }
+
+    function qsA(query){
+        return document.querySelectorAll(query);
+    }
+
     let cookie = getCookie("color_mode");
 
+    // Set styles depending on the color_mode cookie
     if(cookie == 'dark'){
         body[0].style.backgroundColor = "#1d1e22";
         body[0].style.color = "white";
@@ -74,14 +84,7 @@ window.onload = function(){
         checkbox.checked = false;
     }
 
-    function qs(query){
-        return document.querySelector(query);
-    }
-
-    function qsA(query){
-        return document.querySelectorAll(query);
-    }
-
+    // Set styles and store a cookie if color_mode switch changes
     checkbox.addEventListener('change', function (){
         if(checkbox.checked){ 
             body[0].style.backgroundColor = "#1d1e22";
@@ -141,6 +144,7 @@ window.onload = function(){
         }
     })
 
+    // Slow the background weather widget video and change it depending if its day or night
     var video = document.getElementById("back-weather"); 
     video.playbackRate = 0.5;
     var isday = document.getElementById("is_day");
@@ -150,6 +154,7 @@ window.onload = function(){
         video.style.filter = "blur(5px)";
     }
 
+    // Right top dropdown menú
     $(".dropdown-toggle").click(function(){
         if($(".dropdown-menu").is(':visible')){
             $(".dropdown-menu").slideUp('fast');
@@ -157,6 +162,8 @@ window.onload = function(){
                 $(".dropdown-menu").slideDown('fast');
         }
     })
+
+
 
     $("#home").click(function(){
         $(location).attr('href','welcome.php');
@@ -166,6 +173,7 @@ window.onload = function(){
         $(location).attr('href','explore.php');
     });
 
+    // Scroll to top button
     $(window).scroll(function() {
         if ($(this).scrollTop() > 300) {
             $('a.scroll-top').fadeIn('slow');

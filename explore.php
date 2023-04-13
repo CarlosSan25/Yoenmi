@@ -69,4 +69,5 @@ require('header.php');
         </div>
     </div>
 </body>
+<script src="main.js"></script>
 </html>
