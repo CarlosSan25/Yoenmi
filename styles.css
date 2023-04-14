@@ -667,6 +667,43 @@ a:link, a:visited, a:active {
   background-color: #8a400049;
 }
 
+.delete-post-button, .delete-comment-button{
+  color: #ff0000;
+  display: flex;
+  border: 1px solid;
+  width: fit-content;
+  padding: 6px 22px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-post-button:hover, .delete-comment-button:hover{
+  background-color: #8513134a;
+}
+
+.edit-post-button{
+  color: #fff700;
+  display: flex;
+  border: 1px solid;
+  width: fit-content;
+  padding: 6px 22px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-post-button:hover{
+  background-color: #aaa4026b;
+}
+
+.alert-comm{
+  display: none;
+}
+
+.edit-delete-buttons{
+  position: absolute;
+  right: 0;
+}
+
 .comments-button-opened{
   background-color: #ff7700;
   color: white;
@@ -712,6 +749,7 @@ a:link, a:visited, a:active {
 .modal{
   padding: 0px !important;
   overflow: visible !important;
+  height: fit-content !important;
 }
 
 .header-modal{
@@ -767,6 +805,7 @@ a.scroll-top img {
   gap: 20px;
   border-radius: 5px;
   padding-left: 50px;
+  position: relative;
 }
 
 .comment>div:first-child{
@@ -779,4 +818,12 @@ a.scroll-top img {
   display: flex;
   gap: 10px;
   align-items: center;
+}
+
+.comment-topline::after{
+  content: '';
+  position: absolute;
+  top: 0;
+  border-top: solid 1px rgb(206 206 206);
+  width: 20%;
 }

@@ -3,12 +3,12 @@
 require("../db_conn.php");
 
 // Assign recieved data
-$post_id = $_POST["post_id"];
+
 
 //$input_image = $_FILES["image"];
 
 if($_GET['type'] == 'insert'){
-
+    $post_id = $_POST["post_id"];
     $input_content = $_POST["content"];
     $user_id = $_POST["user_id"];
 
@@ -49,8 +49,17 @@ if($_GET['type'] == 'insert'){
         }
     }
 } else if($_GET['type'] == 'get'){
+    $post_id = $_POST["post_id"];
     $result = $conn->getComments($post_id);
     echo json_encode($result);
+}else if($_GET['type'] == 'count'){
+    $post_id = $_POST["post_id"];
+    $result = $conn->countComments($post_id);
+    echo json_encode($result);
+} else if($_GET['type'] == 'delete'){
+    $comment_id = $_POST["comment_id"];
+    $result = $conn->deleteComment($comment_id);
+    echo $result;
 }
 
 ?>

@@ -6,7 +6,7 @@ require('header.php');
             </script>
             <div class="row mainframe">
                 <div class="col-8">
-                    <form action="controllers/post.php" enctype="multipart/form-data" method="POST" style="width: 100%;">
+                    <form action="controllers/post.php?type=post" enctype="multipart/form-data" method="POST" style="width: 100%;">
                         <div class="d-flex flex-column whats-new" style="gap: 20px;">
                             <div class="d-flex" style="gap: 20px; height: 40px;">
                                 <div class="profile-pic" style="height: 40px !important; width: 40px !important; background-image: url('<?php echo $_SESSION['image']; ?>');"></div>
@@ -34,6 +34,31 @@ require('header.php');
                         </div>
                     </form>
                     <div id="posts" class="posts"></div>
+                    <div id="estas-seguro" class="modal">
+                        <div style='color:black; text-align:center; padding:20px;font-size: 20px;'><strong>¿Estás seguro que deseas eliminar este post?</strong></div>
+                        <div class="d-flex justify-content-center" style="padding:20px; gap: 10px;">
+                            <button id="confirmar-delete-modal" class="btn btn-danger">Eliminar</button>
+                            <button id="cerrar-delete-modal" class="btn btn-warning">Cancelar</button>
+                        </div>
+                    </div>
+                    <div id="estas-seguro-comment" class="modal">
+                        <div style='color:black; text-align:center; padding:20px;font-size: 20px;'><strong>¿Estás seguro que deseas eliminar este comentario?</strong></div>
+                        <div class="d-flex justify-content-center" style="padding:20px; gap: 10px;">
+                            <button id="confirmar-delete-modal-comment" class="btn btn-danger">Eliminar</button>
+                            <button id="cerrar-delete-modal-comment" class="btn btn-warning">Cancelar</button>
+                        </div>
+                    </div>
+                    <div id="edit-post" class="modal">
+                        <div class="d-flex flex-column align-center justify-content-center">
+                            <div style='color:black; text-align:center; padding:20px;font-size: 20px;'><strong>Edita el post:</strong></div>
+                            <input style="border: 1px solid;width: 60%;align-self: center;" class="input" type="text" id='text-edit-post' name="text-edit-post">
+                            <div style="display:none; width: 60%; align-self: center; margin-top: 10px;" class="alert alert-danger" id='alert-edit-post' role="alert"></div>
+                            <div class="d-flex justify-content-center" style="padding:20px; gap: 10px;">
+                                <button id="confirmar-edit-modal" class="btn btn-warning">Editar</button>
+                                <button id="cerrar-edit-modal" class="btn btn-danger">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                     <div class="col-4">
                         <div class="weather d-flex flex-column justify-content-center" style="align-items:center;">

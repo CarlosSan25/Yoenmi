@@ -86,6 +86,18 @@ class DB{
         return $result;
     }
 
+    public function deletePost($post_id){
+        $query = "DELETE FROM posts WHERE ID = '$post_id';";
+        $stmt = $this->conn->prepare($query);
+        if($stmt->execute()){return "true";} else {return "false";}
+    }
+
+    public function editPost($post_id, $content){
+        $query = "UPDATE posts SET content='$content' WHERE ID = '$post_id';";
+        $stmt = $this->conn->prepare($query);
+        if($stmt->execute()){return "true";} else {return "false";}
+    }
+
     public function countLikes($post_id){
         $query = "SELECT COUNT(post_id) FROM likes WHERE post_id = $post_id";
         $result = $this->query($query);
@@ -136,6 +148,12 @@ class DB{
         $query = "INSERT INTO comments (post_id, user_id, content, image) VALUES ('$post_id','$user_id', '$content', '$image');";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
+    }
+
+    public function deleteComment($comment_id){
+        $query = "DELETE FROM comments WHERE ID = '$comment_id';";
+        $stmt = $this->conn->prepare($query);
+        if($stmt->execute()){return 'true';} else {return 'false';}
     }
 }
 

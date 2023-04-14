@@ -113,6 +113,10 @@ window.onload = function(){
             see_likes.forEach(function(element){
                 element.style.filter = 'invert(1)';
             });
+            var comments = qsA('.form-comm');
+            comments.forEach(function(element){
+                element.style.backgroundColor = 'rgb(26 30 45)';
+            });
         } else{
             body[0].style.backgroundColor = "white";
             body[0].style.color = "black";
@@ -140,6 +144,10 @@ window.onload = function(){
             var see_likes = qsA("#see-likes");
             see_likes.forEach(function(element){
                 element.style.filter = 'invert(0)';
+            });
+            var comments = qsA('.form-comm');
+            comments.forEach(function(element){
+                element.style.backgroundColor = 'rgb(13 87 151 / 65%)';
             });
         }
     })
