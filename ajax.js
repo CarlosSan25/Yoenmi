@@ -56,8 +56,10 @@ $(document).ready(function(){
             $('#posts').append("<div id='"+post['ID']+"' class='d-flex flex-column post " + color_class + "'></div>");
             $('#'+post['ID']).append("<div><div><div class='profile-pic post-user-image' style='background-image: url("+post['avatar']+");'></div><span class='name'>"+post['Nombre']+"</span><span class='username'> @"+post['username']+"</span></div><span>"+date+"</span></div>");
             $('#'+post['ID']).append("<div class='text-content'>"+post['content']+"</div>");
-            if(post['image'].length > 0){
-                $('#'+post['ID']).append("<img src='"+post['image']+"'>");
+            if(post['image4'].length > 0){
+                $('#'+post['ID']).append("<div class='grid4'><div class='grid4-img' style='background-image: url("+post['image']+")'></div><div class='grid4-img' style='background-image: url("+post['image2']+")'></div><div class='grid4-img' style='background-image: url("+post['image3']+")'></div><div class='grid4-img' style='background-image: url("+post['image4']+")'></div>");
+            } else if(post['image4'].length < 1 && post['image3'].length > 0){
+                $('#'+post['ID']).append("<div class='grid3'><div class='grid3-img' style='background-image: url("+post['image']+")'></div><div class='grid3-img' style='background-image: url("+post['image2']+")'></div><div class='grid3-img grid3-imgbot' style='background-image: url("+post['image3']+")'></div>");
             }
 
             // If the post is liked by the current user, add correpondent class

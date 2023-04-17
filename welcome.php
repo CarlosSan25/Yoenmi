@@ -16,7 +16,7 @@ require('header.php');
                                 <div class="div d-flex" style="gap: 20px;">
                                     <label for=""><img style="cursor:pointer;" class="ico" width="20px" src="media/camara.svg" alt=""></label>
                                     <label for="image"><img style="cursor:pointer;" class="ico" width="20px" src="media/imagen.svg" alt=""></label>
-                                    <input style="display:none;" type="file" class="form-control" id="image" name="image" accept="image/*" />
+                                    <input style="display:none;" type="file" class="form-control" id="image" name="image[]" accept="image/*" multiple />
                                     <a href="#"><img style="cursor:pointer;" class="ico" width="20px" src="media/enlace-alt.svg" alt=""></a>
                                     <a href="#"><img style="cursor:pointer;" class="ico" width="20px" src="media/marcador.svg" alt=""></a>
                                     <input style="display: none;" id="id" name="id" type="text" value="<?php echo $_SESSION["id"]; ?>">
@@ -32,6 +32,7 @@ require('header.php');
                             }
                             ?>
                         </div>
+                        <output style="display:none;"></output>
                     </form>
                     <div id="posts" class="posts"></div>
                     <div id="estas-seguro" class="modal">

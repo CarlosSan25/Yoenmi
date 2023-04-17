@@ -64,8 +64,8 @@ class DB{
         return $result;
     }
 
-    public function insertPost($user_id, $content, $image){
-        $query = "INSERT INTO posts (user_id, content, image) VALUES ('$user_id', '$content', '$image');";
+    public function insertPost($user_id, $content, $image1, $image2, $image3, $image4){
+        $query = "INSERT INTO posts (user_id, content, image, image2, image3, image4) VALUES ('$user_id', '$content', '$image1', '$image2', '$image3', '$image4');";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
     }

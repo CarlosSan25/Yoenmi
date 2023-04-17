@@ -827,3 +827,38 @@ a.scroll-top img {
   border-top: solid 1px rgb(206 206 206);
   width: 20%;
 }
+
+.output-images, .grid4, .grid3{
+  display: grid;
+  grid-template-columns: 356px 356px;
+  grid-template-rows: auto;
+  gap: 20px;
+  padding: 20px;
+  align-self: center;
+}
+
+.output-image{
+  position: relative;
+}
+
+.output-image>div, .grid4-img, .grid3-img{
+  width: 356px;
+  height: 200px;
+  background-size: cover;
+  background-position: top;
+}
+
+.output-image>span{
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 0px;
+  color: black;
+  font-size: 27px;
+}
+
+.grid3-imgbot{
+  grid-column: 1/2;
+  width: 732px;
+  background-position: center;
+}

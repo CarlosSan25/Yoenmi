@@ -193,4 +193,42 @@ window.onload = function(){
         event.preventDefault();
         $('html, body').animate({scrollTop: 0});
     });
+
+    const input = document.querySelector("input#image");
+    const output = document.querySelector("output");
+    let imagesArray = [];
+
+    input.addEventListener("change", () => {
+        const file = input.files;
+
+        for(let i=0; i<file.length && i<4; i++){
+            imagesArray.push(file[i]);
+        }
+        displayImages();
+        output.style.display = "block";
+    });
+
+    function displayImages() {
+        let images = '<div style="padding: 20px;"><span style="margin-bottom: 15px;">Máximo 4 imágenes.</span><div class="output-images">';
+
+        for(let i=0; i<imagesArray.length;i++){
+            images += `<div class="output-image">
+            <div style="background-image: url(${URL.createObjectURL(imagesArray[i])})"></div>
+            <span style="cursor:pointer;" id="${i}">&times;</span>
+            </div>`
+        }
+
+        images += "</div></div>"
+        output.innerHTML = images;
+        
+        document.querySelectorAll('.output-image>span').forEach(item => {
+            item.addEventListener('click', function(){
+                const file = input.files;
+                let index = item.id;
+                file.splice(index, 1);
+                imagesArray.splice(index, 1);
+                displayImages();
+            })
+        });
+    }
 }
