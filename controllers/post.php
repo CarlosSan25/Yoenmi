@@ -6,100 +6,55 @@ if($_GET['type'] == 'post'){
     // Assign recieved data
     $input_content = $_POST["content"];
     $user_id = $_POST["id"];
-    $input_image = $_FILES["image"];
-    $backPage = explode("?",$_SERVER['HTTP_REFERER'])[0];
-
-    var_dump($input_image['error']);
-
-    $error_codes = ['The uploaded file exceeds the upload_max_filesize directive in php.ini', 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form', 'The uploaded file was only partially uploaded', 'No file was uploaded', 'Missing a temporary folder', 'Failed to write file to disk', 'A PHP extension stopped the uploading process'];
+    $input_image[] = $_FILES["image"];
 
     // If user didn't insert text, error
     if($input_content == NULL){
         $error = "Debes introducir algo de texto.";
         header("Location: ../welcome.php?error=$error");
     } else{
-        $ap_images = ["", "", "",""];
-        $p_images = ["", "", "",""];
         // If user inserted a image
-        if(strlen($input_image['name'][0]) > 0){
-            // Prove image uploads error
-            $image_error = false;
-            for($i=0;$i<count($input_image['error']);$i++){
-                if($input_image['error'][$i] != 0){
-                    switch ($input_image['error'][$i]){
-                        case '1':
-                            $error = "Ha habido un error al subir una imagen: ".$error_codes[0];
-                            $image_error = true;
-                            break;
-
-                        case '2':
-                            $error = "Ha habido un error al subir una imagen: ".$error_codes[1];
-                            $image_error = true;
-                            break;
-                        
-                        case '3':
-                            $error = "Ha habido un error al subir una imagen: ".$error_codes[2];
-                            $image_error = true;
-                            break; 
-                        case '4':
-                            $error = "Ha habido un error al subir una imagen: ".$error_codes[3];
-                            $image_error = true;
-                            break;
-                        case '5':
-                            $error = "Ha habido un error al subir una imagen: ".$error_codes[4];
-                            $image_error = true;
-                            break;
-                        case '6':
-                            $error = "Ha habido un error al subir una imagen: ".$error_codes[5];
-                            $image_error = true;
-                            break;
-                        case '6':
-                            $error = "Ha habido un error al subir una imagen: ".$error_codes[6];
-                            $image_error = true;
-                            break;
-                        case '7':
-                            $error = "Ha habido un error al subir una imagen: ".$error_codes[7];
-                            $image_error = true;
-                            break;
-                    }
-                }
-            }
+        if(count($input_image[0]['name']) > 0){
             // Get image extension, to change the name and store it
-            if($image_error == false){
-                for($i=0; $i<count($input_image['name']) && $i<4; $i++){
-                    $new_name = explode(".",$input_image['name'][$i]);
-                    $p_images[$i] = "../media/user-uploads/" . date('d.m.Y.H.i.s') . "[" . $i . "]" . "." . end($new_name);
-                    $ap_images[$i] = "http://localhost/yoenmi/media/user-uploads/" . date('d.m.Y.H.i.s') . "[" . $i . "]" . "." . end($new_name);
-                    
-                    // Store the image in the server
-                    if(move_uploaded_file($input_image['tmp_name'][$i], $p_images[$i])){
-                        $stmt = $conn->insertPost($user_id, $input_content, $ap_images[0], $ap_images[1], $ap_images[2], $ap_images[3]);
-                        if($stmt){
-                            $success="Post publicado con foto.";
-                            header("Location: ".$backPage."?success=$success");
-                        }else{
-                            $error="Ha habido un error, por favor, inténtelo de nuevo.";
-                            header("Location: ".$backPage."?error=$error&content=$input_content");
-                        }
-                            // Store the post in the DB
-                    } else {
-                        $error = "Ha habido un error al subir la imagen. Por favor, inténtalo de nuevo.";
-                    header("Location: ".$backPage."?error=$error");
-                    }
-                }
-            } else{
-                header("Location: ".$backPage."?error=$error");
-            }
+            $ap_images = ["", "", "",""];
+            $p_images = ["", "", "",""];
             
+            for($i=0; $i<count($input_image[0]['name']) && $i<4; $i++){
+                $new_name = explode(".",$input_image[0]['name'][$i]);
+                $p_images[$i] = "../media/user-uploads/" . date('d.m.Y.H.i.s') . "[" . $i . "]" . "." . end($new_name);
+                $ap_images[$i] = "http://localhost/yoenmi/media/user-uploads/" . date('d.m.Y.H.i.s') . "[" . $i . "]" . "." . end($new_name);
+                
+                // Store the image in the server
+                if(move_uploaded_file($input_image[0]['tmp_name'][$i], $p_images[$i])){
+                        $done = true;
+                        // Store the post in the DB
+                } else {
+                        $done = false;
+                        break;
+                }
+            }
+            if($done == false){
+                    $error = "Ha habido un error al subir la imagen. Por favor, inténtalo de nuevo.";
+                    header("Location: ".$_SERVER['HTTP_REFERER']."?error=$error");
+            } else if($done == true){
+                $stmt = $conn->insertPost($user_id, $input_content, $ap_images[0], $ap_images[1], $ap_images[2], $ap_images[3]);
+                if($stmt){
+                    $success="Post publicado con foto.";
+                    header("Location: ".$_SERVER['HTTP_REFERER']."?success=$success");
+                }else{
+                    $error="Ha habido un error, por favor, inténtelo de nuevo.";
+                    header("Location: ".$_SERVER['HTTP_REFERER']."?error=$error&content=$input_content");
+                }
+            }
         } else{
             // Insert the post without images
             $stmt = $conn->insertPost($user_id, $input_content, $ap_images[0], $ap_images[1], $ap_images[2], $ap_images[3]);
             if($stmt){
                 $success="Post publicado.";
-                header("Location: ".$backPage."?success=$success");
+                header("Location: ".$_SERVER['HTTP_REFERER']."?success=$success");
             }else{
                 $error="Ha habido un error, por favor, inténtelo de nuevo.";
-                header("Location: ".$backPage."?error=$error&content=$input_content");
+                header("Location: ".$_SERVER['HTTP_REFERER']."?error=$error&content=$input_content");
             }
         }
     }
@@ -113,4 +68,5 @@ if($_GET['type'] == 'post'){
         $result = $conn->editPost($post_id, $content);
         echo $result;
     }
+
 ?>
