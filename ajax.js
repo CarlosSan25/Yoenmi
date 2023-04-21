@@ -54,12 +54,16 @@ $(document).ready(function(){
 
             // Append each post
             $('#posts').append("<div id='"+post['ID']+"' class='d-flex flex-column post " + color_class + "'></div>");
-            $('#'+post['ID']).append("<div><div><div class='profile-pic post-user-image' style='background-image: url("+post['avatar']+");'></div><span class='name'>"+post['Nombre']+"</span><span class='username'> @"+post['username']+"</span></div><span>"+date+"</span></div>");
+            $('#'+post['ID']).append("<div class='user_and_date'><div class='user-info'><div class='profile-pic post-user-image' style='background-image: url("+post['avatar']+");'></div><span class='name'>"+post['Nombre']+"</span><span class='username'> @"+post['username']+"</span></div><span>"+date+"</span></div>");
             $('#'+post['ID']).append("<div class='text-content'>"+post['content']+"</div>");
             if(post['image4'].length > 0){
-                $('#'+post['ID']).append("<div class='grid4'><div class='grid4-img' style='background-image: url("+post['image']+")'></div><div class='grid4-img' style='background-image: url("+post['image2']+")'></div><div class='grid4-img' style='background-image: url("+post['image3']+")'></div><div class='grid4-img' style='background-image: url("+post['image4']+")'></div>");
+                $('#'+post['ID']).append("<div class='grid4'><div id='img-slide' data-order='1' class='grid4-img' style='background-image: url("+post['image']+")'></div><div id='img-slide' data-order='2' class='grid4-img' style='background-image: url("+post['image2']+")'></div><div id='img-slide' class='grid4-img' data-order='3' style='background-image: url("+post['image3']+")'></div><div id='img-slide' class='grid4-img' data-order='4' style='background-image: url("+post['image4']+")'></div>");
             } else if(post['image4'].length < 1 && post['image3'].length > 0){
-                $('#'+post['ID']).append("<div class='grid3'><div class='grid3-img' style='background-image: url("+post['image']+")'></div><div class='grid3-img' style='background-image: url("+post['image2']+")'></div><div class='grid3-img grid3-imgbot' style='background-image: url("+post['image3']+")'></div>");
+                $('#'+post['ID']).append("<div class='grid3'><div id='img-slide' class='grid3-img' data-order='1' style='background-image: url("+post['image']+")'></div><div id='img-slide' class='grid3-img' data-order='2' style='background-image: url("+post['image2']+")'></div><div id='img-slide' class='grid3-img grid3-imgbot' data-order='3' style='background-image: url("+post['image3']+")'></div>");
+            } else if(post['image3'].length < 1 && post['image2'].length > 0){
+                $('#'+post['ID']).append("<div class='grid2'><div id='img-slide' class='grid2-img' data-order='1' style='background-image: url("+post['image']+")'></div><div id='img-slide' class='grid2-img' data-order='2' style='background-image: url("+post['image2']+")'></div></div>");
+            } else if(post['image2'].length < 1 && post['image'].length > 0){
+                $('#'+post['ID']).append("<div class='grid1'><div id='img-slide' class='grid1-img' data-order='1' style='background-image: url("+post['image']+")'></div></div>");
             }
 
             // If the post is liked by the current user, add correpondent class
@@ -69,8 +73,10 @@ $(document).ready(function(){
                 liked_class = '';
             }
 
-            $('#'+post['ID']).append("<div style='gap:10px; align-items: center;position:relative;' id='likes-com' class='d-flex'><div class='like "+liked_class+"'><span id='likes-count'>"+post['likes']+"</span><img  height=20px src='media/like.png'></div><a href='likes.php?id="+post['ID']+"' rel='modal:open'><img height=25px src='media/ojo.png' class='ico see-likes' id='see-likes'></img></a></div>");
-            $('#'+post['ID']+' #likes-com').append("<div class='comments-button'><span id='comments-count'>"+post['count-comm']+"</span><img height=20px src='media/comments.png'></div>");
+            $('#'+post['ID']).append("<div class='likes_comment_count' style='display:flex; gap:10px; align-items: center;position:relative;' id='count' class='d-flex'><div class='likes-count "+liked_class+"'><a id='likes' href='likes.php?id="+post['ID']+"' rel='modal:open'><span id='likes-count'>"+post['likes']+"</span><span> Likes</span></a></div></div>");
+            $('#'+post['ID']+' #count').append("<div class='likes-count "+liked_class+"'><a class='comments-button' style='cursor: pointer;'><span id='comments-count'>"+post['count-comm']+"</span><span> Comment</span></a></div>");
+
+            $('#'+post['ID']).append("<div style='gap:10px; align-items: center;position:relative;' id='likes-com' class='d-flex'><div class='like "+liked_class+"'><img class='pulgar' height=20px src='media/like.png'></div></div>");
 
             if(post['username'] == user_username){
                 $('#'+post['ID']+' #likes-com').append("<div class='edit-delete-buttons'><div class='delete-post-button'><img height=20px src='media/delete.png'></div><div class='edit-post-button'><img height=20px src='media/edit.png'></div></div>");
@@ -114,13 +120,11 @@ $(document).ready(function(){
             
         // Post comments dropdown
         $(".comments-button").click(function(){
-        let post_id = $(this).parent().parent().attr("id");
+        let post_id = $(this).parent().parent().parent().attr("id");
         if($("#form-"+post_id).is(':visible')){
-            $(this).removeClass('comments-button-opened');
             $("#form-"+post_id).slideUp('fast');
         }else if($("#form-"+post_id).is(':hidden')){
             $("#form-"+post_id).slideDown('fast');
-            $(this).addClass('comments-button-opened');
         }
 
         // Function to send a comment. It stores the comment at the DB,
@@ -185,8 +189,36 @@ $(document).ready(function(){
     })
 })
 
+    $(document).on("click", "#img-slide", function(){
+        $(".mySlides").find("img").remove();
+        let post_id = $(this).parent().parent().attr("id");
+        let imagenes = $("#"+post_id+" #img-slide");
+        console.log(imagenes);
+        for(let i=0; i<imagenes.length; i++){
+            src = imagenes[i].attributes[3].nodeValue.split("(")[1].slice(0, -1);
+            $(".mySlides").append("<img class='slide"+(i+1)+"' src='"+src+"' style='width:100%; display:none;'>");
+        }
+        let siblings = $(this).siblings().length + 1;
+        let index = $(this).data("order");
+        $(".slide"+index).addClass("slide-active");
+        document.getElementsByClassName("numbertext")[0].innerHTML = index+" / "+siblings;
+        let user_text = $("#"+post_id).children(":first").html();
+        let post_content = $("#"+post_id+" .text-content").html();
+        $("#slides-user-date")[0].innerHTML = user_text;
+        $("#slides-text-content")[0].innerHTML = post_content;
+        $(".mySlides").addClass("show");
+
+        $("#slideshow-container").modal({
+            showClose: false
+        });
+    })
+
     $(document).on("click", ".delete-post-button", function () {
-        
+        let post_id = $(this).parent().parent().parent()[0].id;
+        if($("#estas-seguro>span")){
+            $("#estas-seguro>span").remove();
+        }
+        $("#estas-seguro").append("<span style='display:none;' value='"+post_id+"' />")
         $("#estas-seguro").modal({
             escapeClose: false,
             clickClose: false,
@@ -199,8 +231,7 @@ $(document).ready(function(){
     });
 
     $("#confirmar-delete-modal").click(function(){
-        let post_id = $('.delete-post-button').parent().parent().parent()[0].id;
-
+        let post_id = $('#estas-seguro span').attr("value");
         $.ajax( "controllers/post.php?type=delete", {
             type: 'POST',
             dataType: 'text',
@@ -213,6 +244,13 @@ $(document).ready(function(){
     });
 
     $(document).on("click", ".edit-post-button", function () {
+        let post_id = $(this).parent().parent().parent()[0].id;
+        let post_content = $("#"+post_id+" .text-content").text();
+        $("#text-edit-post").val(post_content);
+        if($("#edit-post>span")){
+            $("#edit-post>span").remove();
+        }
+        $("#edit-post").append("<span style='display:none;' value='"+post_id+"' />")
         $("#edit-post").modal({
             escapeClose: false,
             clickClose: false,
@@ -229,8 +267,7 @@ $(document).ready(function(){
     $("#confirmar-edit-modal").click(function(){
         let content = $("#text-edit-post").val();
         if(content != ''){
-            let post_id = $('.edit-post-button').parent().parent().parent()[0].id;
-            console.log(post_id);
+            let post_id = $('#edit-post span').attr("value");
             $.ajax( "controllers/post.php?type=edit", {
                 type: 'POST',
                 dataType: 'text',
