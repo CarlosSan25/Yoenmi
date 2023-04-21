@@ -12,6 +12,7 @@ require('header.php');
                                 <div class="profile-pic" style="height: 40px !important; width: 40px !important; background-image: url('<?php echo $_SESSION['image']; ?>');"></div>
                                 <input type="text" id="content" name="content" class="search" style="padding: 10px; width: 100%;" placeholder="What's on your mind?" value="<?php if(isset($_GET["content"])){echo $_GET["content"];} ?>">
                             </div>
+                            <div id="max-content" style="display:none; text-align:right;"></div>
                             <div class="d-flex justify-content-between" style="align-items:center;">
                                 <div class="div d-flex" style="gap: 20px;">
                                     <label for=""><img style="cursor:pointer;" class="ico" width="20px" src="media/camara.svg" alt=""></label>
@@ -21,7 +22,7 @@ require('header.php');
                                     <a href="#"><img style="cursor:pointer;" class="ico" width="20px" src="media/marcador.svg" alt=""></a>
                                     <input style="display: none;" id="id" name="id" type="text" value="<?php echo $_SESSION["id"]; ?>">
                                 </div>
-                                <button style="padding: 5px 30px;" class="btn btn-dark" type="submit">Post</button>
+                                <button id="post-submit" style="padding: 5px 30px;" class="btn btn-dark" type="submit">Post</button>
                             </div>
                             <?php
                             if(isset($_GET["error"])){
@@ -32,7 +33,10 @@ require('header.php');
                             }
                             ?>
                         </div>
-                        <output style="display:none;"></output>
+                        <div id="output-container" style="display:none;">
+                            <span>Máximo 4 imágenes.</span>
+                            <output></output>
+                        </div>
                     </form>
                     <div id="posts" class="posts"></div>
                     <div id="estas-seguro" class="modal">
@@ -60,8 +64,21 @@ require('header.php');
                             </div>
                         </div>
                     </div>
+                    <div id="slideshow-container" class="slideshow-container modal">
+                        <div class="mySlides fade">
+                            <div class="numbertext"></div>
+                            <div id="text-slides" class="text">
+                                <div id="slides-user-date" class="user_and_date"></div>
+                                <div id="slides-text-content"></div>
+                            </div>
+                        </div>
+
+                        <!-- Next and previous buttons -->
+                        <a class="prev">&#10094;</a>
+                        <a class="next">&#10095;</a>
+                    </div>
                 </div>
-                    <div class="col-4">
+                <div class="col-4">
                         <div class="weather d-flex flex-column justify-content-center" style="align-items:center;">
                             <?php require("weather-api.php"); ?>
                             <div class="d-flex justify-content-between" style="font-size: 20px; width: 100%;">
