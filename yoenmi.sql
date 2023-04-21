@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 14-04-2023 a las 15:44:13
+-- Tiempo de generación: 21-04-2023 a las 15:30:51
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 7.4.33
 
@@ -80,7 +80,6 @@ INSERT INTO `comments` (`ID`, `post_id`, `user_id`, `content`, `image`, `date`) 
 (80, 18, 17, 'viva españa', '', '2023-04-13 15:42:15'),
 (81, 33, 17, 'como va esto jajajaja', '', '2023-04-14 07:50:53'),
 (124, 21, 17, 'Por fin funciona!', '', '2023-04-14 09:01:31'),
-(76, 42, 17, 'aaaaa', '', '2023-04-13 15:38:47'),
 (145, 43, 16, 'Muy bien Diego! Que tal tú?', '', '2023-04-14 15:37:34'),
 (122, 18, 17, 'valiente', '', '2023-04-14 09:01:02'),
 (125, 18, 17, 'parsed', '', '2023-04-14 09:02:20'),
@@ -112,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `likes` (
   PRIMARY KEY (`ID`),
   KEY `user_FK` (`user_id`),
   KEY `post_FK` (`post_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `likes`
@@ -124,7 +123,7 @@ INSERT INTO `likes` (`ID`, `user_id`, `post_id`, `date`) VALUES
 (26, 19, 27, '2023-04-12 13:52:45'),
 (21, 19, 32, '2023-04-12 13:52:45'),
 (23, 19, 29, '2023-04-12 13:52:45'),
-(18, 17, 29, '2023-04-12 13:52:45'),
+(83, 17, 29, '2023-04-19 15:22:16'),
 (17, 17, 30, '2023-04-12 13:52:45'),
 (44, 17, 27, '2023-04-12 14:51:50'),
 (27, 19, 31, '2023-04-12 13:52:45'),
@@ -158,41 +157,46 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `user_id` int NOT NULL,
   `content` varchar(280) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish2_ci NOT NULL,
   `image` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish2_ci NOT NULL,
+  `image2` varchar(200) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  `image3` varchar(200) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  `image4` varchar(200) COLLATE utf8mb4_spanish2_ci NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
   KEY `user_FK` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `posts`
 --
 
-INSERT INTO `posts` (`ID`, `user_id`, `content`, `image`, `date`) VALUES
-(21, 17, 'Ahora voy a subir un post con foto', 'http://localhost/yoenmi/media/user-uploads/11.04.2023.09.26.33.png', '2023-04-11 09:26:33'),
-(20, 17, 'Que pasa que ahora siempre saca la misma foto XD', '', '2023-04-11 09:09:12'),
-(19, 17, 'Ahora sin foto', '', '2023-04-11 09:08:51'),
-(18, 17, 'Probemos otra vez', 'http://localhost/yoenmi/media/user-uploads/11.04.2023.09.08.22.jpg', '2023-04-11 09:08:22'),
-(22, 17, 'Y ahora otro post SIN foto', '', '2023-04-11 09:26:43'),
-(23, 17, 'Ultima actualizacion', '', '2023-04-11 09:29:58'),
-(24, 18, 'Hola!', '', '2023-04-11 09:32:28'),
-(25, 17, 'Va esto bien o que jajajaja', '', '2023-04-11 10:55:02'),
-(26, 17, 'Post con foto', 'http://localhost/yoenmi/media/user-uploads/11.04.2023.10.55.26.jpg', '2023-04-11 10:55:26'),
-(27, 17, 'Ole oleeeeeeeee', '', '2023-04-11 10:55:36'),
-(28, 17, 'Vaya hombre primo', '', '2023-04-11 11:05:33'),
-(29, 17, 'Hola Diego', '', '2023-04-11 13:10:04'),
-(30, 17, 'Wow esto va fino!', '', '2023-04-11 15:28:27'),
-(31, 19, 'LLegó el carlitros!! El mejor supija', '', '2023-04-12 11:58:10'),
-(32, 19, 'Que se cuenta el Leo jajaja', '', '2023-04-12 11:58:26'),
-(33, 17, 'Pues na aqui estamos mano', '', '2023-04-12 13:05:09'),
-(35, 19, 'aqui con la yaya que maquina jajajaa', 'http://localhost/yoenmi/media/user-uploads/12.04.2023.13.44.50.jpg', '2023-04-12 13:44:50'),
-(36, 20, 'Bueno no esta mal', '', '2023-04-12 13:56:40'),
-(37, 22, 'Mi primera publicación. ¿Qué tal estáis?', '', '2023-04-12 15:23:37'),
-(46, 17, 'funciona chicha', '', '2023-04-14 14:37:23'),
-(47, 20, 'Salud y republica!', '', '2023-04-14 14:38:55'),
-(48, 16, 'Ostias no me acordaba de la contraseña jajajaja', '', '2023-04-14 14:41:55'),
-(41, 0, 'ah bueno', '', '2023-04-13 11:27:49'),
-(42, 17, 'nina montes', '', '2023-04-13 12:00:04'),
-(43, 21, 'Como va estoooo', '', '2023-04-14 09:33:24');
+INSERT INTO `posts` (`ID`, `user_id`, `content`, `image`, `image2`, `image3`, `image4`, `date`) VALUES
+(20, 17, 'Que pasa que ahora siempre saca la misma foto XD', '', '', '', '', '2023-04-11 09:09:12'),
+(19, 17, 'Ahora sin foto', '', '', '', '', '2023-04-11 09:08:51'),
+(22, 17, 'Y ahora otro post SIN foto', '', '', '', '', '2023-04-11 09:26:43'),
+(23, 17, 'Ultima actualizacion', '', '', '', '', '2023-04-11 09:29:58'),
+(24, 18, 'Hola!', '', '', '', '', '2023-04-11 09:32:28'),
+(25, 17, 'Va esto bien o que jajajaja', '', '', '', '', '2023-04-11 10:55:02'),
+(27, 17, 'Ole oleeeeeeeee', '', '', '', '', '2023-04-11 10:55:36'),
+(28, 17, 'Vaya hombre primo', '', '', '', '', '2023-04-11 11:05:33'),
+(29, 17, 'Hola Diego', '', '', '', '', '2023-04-11 13:10:04'),
+(30, 17, 'Wow esto va fino!', '', '', '', '', '2023-04-11 15:28:27'),
+(31, 19, 'LLegó el carlitros!! El mejor supija', '', '', '', '', '2023-04-12 11:58:10'),
+(32, 19, 'Que se cuenta el Leo jajaja', '', '', '', '', '2023-04-12 11:58:26'),
+(33, 17, 'Pues na aqui estamos mano', '', '', '', '', '2023-04-12 13:05:09'),
+(36, 20, 'Bueno no esta mal', '', '', '', '', '2023-04-12 13:56:40'),
+(37, 22, 'Mi primera publicación. ¿Qué tal estáis?', '', '', '', '', '2023-04-12 15:23:37'),
+(46, 17, 'bacalá', '', '', '', '', '2023-04-14 14:37:23'),
+(47, 20, 'Salud y republica!', '', '', '', '', '2023-04-14 14:38:55'),
+(48, 16, 'Ostias no me acordaba de la contraseña jajajaja', '', '', '', '', '2023-04-14 14:41:55'),
+(41, 0, 'ah bueno', '', '', '', '', '2023-04-13 11:27:49'),
+(42, 17, 'nina montes', '', '', '', '', '2023-04-13 12:00:04'),
+(43, 21, 'Como va estoooo', '', '', '', '', '2023-04-14 09:33:24'),
+(53, 17, 'Solo 3 va', 'http://localhost/yoenmi/media/user-uploads/17.04.2023.15.39.25[0].png', 'http://localhost/yoenmi/media/user-uploads/17.04.2023.15.39.25[1].png', 'http://localhost/yoenmi/media/user-uploads/17.04.2023.15.39.25[2].png', '', '2023-04-17 15:39:25'),
+(61, 17, 'Messi y la yaya', 'http://localhost/yoenmi/media/user-uploads/19.04.2023.14.05.10[0].jpg', 'http://localhost/yoenmi/media/user-uploads/19.04.2023.14.05.10[1].avif', '', '', '2023-04-19 14:05:10'),
+(52, 17, 'y ahora?', 'http://localhost/yoenmi/media/user-uploads/17.04.2023.10.52.09[0].png', 'http://localhost/yoenmi/media/user-uploads/17.04.2023.10.52.09[3].png', 'http://localhost/yoenmi/media/user-uploads/17.04.2023.10.52.09[2].png', 'http://localhost/yoenmi/media/user-uploads/17.04.2023.10.52.09[3].png', '2023-04-17 10:52:09'),
+(62, 17, 'maravilla jimenez', 'http://localhost/yoenmi/media/user-uploads/19.04.2023.14.17.01[0].jpg', '', '', '', '2023-04-19 14:17:01'),
+(63, 17, 'visca el barça', '', '', '', '', '2023-04-19 15:14:25'),
+(67, 17, 'como funciona estoooo', 'http://localhost/yoenmi/media/user-uploads/21.04.2023.15.07.29[0].jpg', 'http://localhost/yoenmi/media/user-uploads/21.04.2023.15.07.29[1].jpg', '', '', '2023-04-21 15:07:29');
 
 -- --------------------------------------------------------
 
