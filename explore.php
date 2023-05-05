@@ -4,6 +4,7 @@ require('header.php');
             <script>
                 $("#explore").addClass('active');
             </script>
+            <script src="ajax.js"></script>
             <div class="row mainframe">
                 <div class="col-8">
                     <form action="controllers/post.php?type=post" enctype="multipart/form-data" method="POST" style="width: 100%;">
@@ -18,8 +19,8 @@ require('header.php');
                                     <label for=""><img style="cursor:pointer;" class="ico" width="20px" src="media/camara.svg" alt=""></label>
                                     <label for="image"><img style="cursor:pointer;" class="ico" width="20px" src="media/imagen.svg" alt=""></label>
                                     <input style="display:none;" type="file" class="form-control" id="image" name="image[]" accept="image/*" multiple />
-                                    <a href="#"><img style="cursor:pointer;" class="ico" width="20px" src="media/enlace-alt.svg" alt=""></a>
-                                    <a href="#"><img style="cursor:pointer;" class="ico" width="20px" src="media/marcador.svg" alt=""></a>
+                                    <img id="url-post" style="cursor:pointer;" class="ico" width="20px" src="media/enlace-alt.svg" alt="">
+                                    <img id="ubicacion-post" style="cursor:pointer;" class="ico" width="20px" src="media/marcador.svg" alt="">
                                     <input style="display: none;" id="id" name="id" type="text" value="<?php echo $_SESSION["id"]; ?>">
                                 </div>
                                 <button id="post-submit" style="padding: 5px 30px;" class="btn btn-dark" type="submit">Post</button>
@@ -39,6 +40,34 @@ require('header.php');
                         </div>
                     </form>
                     <div id="posts" class="posts"></div>
+                    <div id="alert-success" class='alert alert-success' role='alert'></div>
+                    <div id="alert-warning" class='alert alert-warning' role='alert'></div>
+                    <div id="alert-danger" class='alert alert-danger' role='alert'></div>
+                    <div id="add_url" class="modal">
+                        <div style='color:black; text-align:center; padding:20px;font-size: 20px;'><strong>Añade un enlace a tu post</strong></div>
+                        <div style="gap: 15px; align-items: center;" class="d-flex justify-content-center flex-column">
+                            <div class="d-flex" style="gap: 20px; align-items: center;"><label for="texto" style="color:black;">Texto</label><input style="border: 1px solid black" name="texto" type="text"></div>
+                            <div class="d-flex" style="gap: 20px; align-items: center;"><label for="enlace" style="color:black;">Enlace</label><input style="border: 1px solid black" name="enlace" type="text"></div>
+                        </div>
+                        <div class="d-flex justify-content-center" style="padding:20px; gap: 10px;">
+                            <button id="confirmar-url-modal" class="btn btn-success">Añadir</button>
+                            <button id="cerrar-url-modal" class="btn btn-warning">Cancelar</button>
+                        </div>
+                    </div>
+                    <div style="color:black;" id="ubicacion-modal" class="modal">
+                    <div class="d-flex flex-column p-3" style="align-items:center; gap:15px;">
+                        <div style='color:black; text-align:center; padding:20px;font-size: 20px;'><strong>Añade una ubicacion a tu post</strong></div>
+                        <div><u>Añade tus coordenadas</u></div>
+                        <div><label for="latitude">Latitud </label><input style="border: solid 1px black;" type="text" name="latitude"></div>
+                        <div><label for="longitud">Longitud </label><input style="border: solid 1px black;" type="text" name="longitud"></div>
+                        <button type="button" class="btn btn-success">Insertar mis coordenadas</button>
+                        <div>O bien</div>
+                        <button id="detect-ubic" type="button" class="btn btn-outline-success">Detectar mi ubicacion</button>
+                        <div class="d-flex justify-content-center" style="padding:20px; gap: 10px;">
+                            <button id="cerrar-ubic-modal" class="btn btn-warning">Cancelar</button>
+                        </div>
+                    </div>
+                    </div>
                     <div id="estas-seguro" class="modal">
                         <div style='color:black; text-align:center; padding:20px;font-size: 20px;'><strong>¿Estás seguro que deseas eliminar este post?</strong></div>
                         <div class="d-flex justify-content-center" style="padding:20px; gap: 10px;">
@@ -54,10 +83,22 @@ require('header.php');
                         </div>
                     </div>
                     <div id="edit-post" class="modal">
-                        <div class="d-flex flex-column align-center justify-content-center">
+                        <div class="d-flex flex-column align-center justify-content-center" style="gap: 10px;">
                             <div style='color:black; text-align:center; padding:20px;font-size: 20px;'><strong>Edita el post:</strong></div>
-                            <input style="border: 1px solid;width: 60%;align-self: center;" class="input" type="text" id='text-edit-post' name="text-edit-post">
+                            <textarea class="input textarea-edit" type="text" id='text-edit-post' name="text-edit-post"></textarea>
                             <div style="display:none; width: 60%; align-self: center; margin-top: 10px;" class="alert alert-danger" id='alert-edit-post' role="alert"></div>
+                            <div class="d-flex justify-content-between" style="align-items:center;">
+                                <div class="div d-flex" style="gap: 20px; padding-left: 50px;">
+                                    <label for=""><img style="cursor:pointer;" width="20px" src="media/camara.svg" alt=""></label>
+                                    <label for="edit-image"><img style="cursor:pointer;" width="20px" src="media/imagen.svg" alt=""></label>
+                                    <input style="display:none;" type="file" class="form-control img-edit" id="edit-image" name="edit-image[]" accept="image/*" multiple />
+                                    <img id="url-post" style="cursor:pointer;" width="20px" src="media/enlace-alt.svg" alt="">
+                                    <img style="cursor:pointer;" width="20px" src="media/marcador.svg" alt="">
+                                    <input style="display: none;" id="id" name="id" type="text" value="<?php echo $_SESSION["id"]; ?>">
+                                </div>
+                            </div>
+                            <span style="color: black;text-align:center;">Máximo 4 imágenes.</span>
+                            <div id="edit-existing-images"></div>
                             <div class="d-flex justify-content-center" style="padding:20px; gap: 10px;">
                                 <button id="confirmar-edit-modal" class="btn btn-warning">Editar</button>
                                 <button id="cerrar-edit-modal" class="btn btn-danger">Cancelar</button>
@@ -105,6 +146,9 @@ require('header.php');
                                     <span><?php echo $response->current->precip_in ?> %</span>
                                 </div>
                             </div>
+                        </div>
+                        <div id="sugerencias-amistad" class="p-3 mt-4" style="border: 1px solid white; border-radius:5px;">
+                            <h2 class="text-center">Sugerencias de amistad</h2>
                         </div>
                     </div>
                 </div>

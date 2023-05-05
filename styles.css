@@ -530,7 +530,7 @@ input{
 
 a:link, a:visited, a:active {
   text-decoration:none;
-  color: white;
+  color: #0d6efd;
 }
 
 .ico{
@@ -551,15 +551,15 @@ a:link, a:visited, a:active {
 
 .mainframe{
   padding: 30px;
-  background-color: #17181c;
   height: auto;
   min-height: 100vh;
+  color: white;
 }
 
 .whats-new{
   padding: 20px;
-  background-color: #1e1f23;
   border-radius: 5px;
+  background-color: rgb(1 96 177 / 81%);
 }
 
 .weather{
@@ -622,7 +622,7 @@ a:link, a:visited, a:active {
 }
 
 .post-light{
-  background-color: rgba(1, 96, 177, 0.34);
+  background-color: rgb(1 96 177);
 }
 
 .user_and_date{
@@ -645,8 +645,8 @@ a:link, a:visited, a:active {
 }
 
 .pulgar{
-  cursor: pointer;
   filter: brightness(0) invert(1);
+  cursor: pointer;
 }
 .pulgar:hover{
   filter: none;
@@ -736,6 +736,9 @@ a:link, a:visited, a:active {
   padding: 0px !important;
   overflow: visible !important;
   height: fit-content !important;
+  max-width: none !important;
+  width: fit-content !important;
+  min-width: 500px;
 }
 
 .header-modal{
@@ -896,6 +899,10 @@ output{
   padding: 10px;
 }
 
+a#likes{
+  color: white;
+}
+
 a#likes:hover{
   color:white;
 }
@@ -969,12 +976,6 @@ a#likes:hover{
   top: 0;
 }
 
-/* The dots/bullets/indicators */
-
-.active, .dot:hover {
-  background-color: #717171;
-}
-
 /* Fading animation */
 .fade {
   animation-name: fade;
@@ -996,4 +997,98 @@ a#likes:hover{
 
 .slide-active{
   display: block !important;
+}
+
+.textarea-edit{
+  border: 1px solid;
+  width: 90%;
+  align-self: center;
+  height:100px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.user:hover{
+  background-color: rgb(60, 59, 59);
+  cursor: pointer;
+}
+
+.alert-warning, .alert-success, .alert-danger{
+  position: fixed !important;
+  bottom: 15px;
+  left: 50%;
+  right: 50%;
+  width: 20vw;
+  text-align: center;
+  font-size: 20px;
+  box-shadow: 2px 2px 4px black;
+  display: none;
+}
+
+.profile-avatar{
+  border: solid 2px white;
+  background-size: cover;
+  background-position: center;
+  position:absolute; 
+  left: 50px; 
+  top: -80px; 
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile-avatar:hover, #label-banner:hover{
+  filter: brightness(0.8);
+}
+
+.profile-banner{
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  height:30vh;
+  background-image: url('media/user-uploads/default_banner.png');
+  width: 50.1vw;
+}
+
+#label-banner{
+  cursor: pointer;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #FFF;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  position: sticky;
+  bottom: 20px;
+  left: 50%;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  }
+
+  @keyframes rotation {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+  } 
+
+.map-off{
+  position: absolute;
+  top: 7px;
+  right: 15px;
+  color: black;
+  font-size: 25px;
+  font-family: sans-serif;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+}
+
+.map-off:hover{
+  transform: scale(1.5);
 }

@@ -1,20 +1,15 @@
 <?php
 
-if(isset($_COOKIE["usuario"])){
-    if(!isset($_SESSION["usuario"])){
-        require('db_conn.php');
-        session_start();
-        $data = $conn->getUserData($_COOKIE["usuario"]);
-        $_SESSION["usuario"] = $_COOKIE["usuario"];
-        $_SESSION['name'] = $data['Nombre'];
-        $_SESSION['image'] = $data['avatar'];
-        $_SESSION['id'] = $data['ID'];
-    }
-} else{ header("Location: views/login/login.php"); }
+if(isset($_GET['user'])){
+    $username = $_GET['user'];
+} else{
+    header("Location: index.php");
+    die();
+}
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,7 +24,7 @@ if(isset($_COOKIE["usuario"])){
     <title>Red Social - Yoenmi</title>
 </head>
 <body>
-    <div id="user_id" style="display: none;"><?php echo $_SESSION['id']; ?></div>
+    <div id="username" style="display: none;"><?php echo $username ?></div>
     <a href="#" class="scroll-top" title="Ir arriba">
         <img src="media/up.png" height="20px;"></img>
     </a>
@@ -42,12 +37,22 @@ if(isset($_COOKIE["usuario"])){
                         <span class="logo-text">Yoenmi</span>
                     </a>
                 </div>
-                <a style="color:white;" href="profile.php?user=<?php echo $_COOKIE["usuario"] ?>">
-                <div class="user">
-                    <div class="profile-pic" style="background-image:url('<?php echo $_SESSION['image']; ?>')"></div>
-                    <span class="name"><?php echo $_SESSION['name']; ?></span><span class="username">@<?php echo $_COOKIE["usuario"]; ?></span>
-                </div>
-                </a>
+                <?php
+                
+                if(isset($_COOKIE["usuario"])){
+                    if(!isset($_SESSION["usuario"])){
+                        require('db_conn.php');
+                        session_start();
+                        $data = $conn->getUserData($_COOKIE["usuario"]);
+                        $_SESSION['name'] = $data['Nombre'];
+                        $_SESSION['image'] = $data['avatar'];
+                        $_SESSION['id'] = $data['ID'];
+
+                        echo '<a style="color:white;" href="profile.php?user='.$_COOKIE["usuario"].'"><div class="user"><div class="profile-pic" style="background-image:url('. $_SESSION['image'].')"></div><span class="name">'.$_SESSION["name"].'<span><span class="username"> @'. $_COOKIE["usuario"].'</span></div></a>';
+                    }
+                }
+                
+                ?>
                 <div class="menu-left">
                     <div id="home" class="d-flex"><img class="ico" src="media\hogar.svg"><span>Home</span></div>
                     <div id="latest" class="d-flex"><img class="ico" src="media\calendario.svg"><span>Latest</span></div>
@@ -57,6 +62,7 @@ if(isset($_COOKIE["usuario"])){
                 </div>
             </div>
         </div>
+        <div id="user_id" style="display: none;"><?php echo $_SESSION['id']; ?></div>
         <div class="col-9 d-flex flex-column">
             <div class="top p-4 row d-flex">
                 <input class="col-5 search p-2" placeholder="Search..."></input>
@@ -64,7 +70,12 @@ if(isset($_COOKIE["usuario"])){
                 <div class="col-2 d-flex top-right">
                     <div class="bell"><img class="ico" src="media\notificacion.png" alt=""></div>
                     <div class="not"><img class="ico" src="media\mensaje.png" alt=""></div>
-                    <a href="profile.php?user=<?php echo $_COOKIE["usuario"]; ?>"><div class="profile-pic profile" style="width:45px !important; height:45px !important;background-image: url('<?php echo $_SESSION['image']; ?>')"></div></a>
+                    <?php
+                    if(isset($_COOKIE["usuario"])){
+                        echo '<a href="profile.php?user='. $_COOKIE["usuario"].'"><div class="profile-pic profile" style="width:45px !important; height:45px !important;background-image: url('. $_SESSION['image'] .')"></div></a>';
+                    }
+                    ?>
+
                 </div>
                 <div class="col-1"></div>
                 <div class="col-1 d-flex" style="margin-top: 5px;">

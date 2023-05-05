@@ -25,3 +25,13 @@ ojo.addEventListener('click', function(){
         ojo.src = "http://localhost/yoenmi/media/ojo-pass-no.png";
     }
 });
+
+console.log($("div.alert-danger").text());
+if($("div.alert-danger").text() != ''){
+    console.log("Okeeeeeey");
+    $("div.alert-danger").show('slow');
+    setTimeout(function(){
+        $("div.alert-danger").hide('slow');
+        $("div.alert-danger").text('');
+    }, 3000);
+}

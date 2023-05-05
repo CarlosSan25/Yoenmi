@@ -8,6 +8,19 @@
 
 $(document).ready(function(){
 
+    let user_id = $("#user_id").text();
+
+    let type;
+
+    // Define type of request depending of the page
+    if($('#home').hasClass('active')){
+        type = 'user';
+    } else{
+        type='all';
+    }
+
+    function loadPosts(){
+
     //Get posts and display them
     let user_id = $("#user_id").text();
     let user_avatar = $(".profile-pic")[0].style.backgroundImage.slice(4, -1).replace(/"/g, "");
@@ -52,9 +65,27 @@ $(document).ready(function(){
                 comment_color_class = 'rgb(13 87 151 / 65%)';
             }
 
+            if(post['content'].includes('[url=')){
+                url = post['content'].split('[url=')[1].split("]")[0];
+                
+                let text = post['content'].split(']')[1].split('[')[0];
+                let regex = /\[url=.*\]/g;
+                let contenido = post['content'].replace(regex,'<a target="_blank" href="'+ url +'">');
+                contenido = contenido.split('>')
+                contenido[0] += '>'+text+'</a>';
+                post['content'] = contenido.join("");
+            }
+
+            let edited = '';
+            if(post['edited'] == 1){
+                edited = "<small style='margin-right: 5px;'>edited on</small>";
+            } else{
+                edited = '';
+            }
+
             // Append each post
             $('#posts').append("<div id='"+post['ID']+"' class='d-flex flex-column post " + color_class + "'></div>");
-            $('#'+post['ID']).append("<div class='user_and_date'><div class='user-info'><div class='profile-pic post-user-image' style='background-image: url("+post['avatar']+");'></div><span class='name'>"+post['Nombre']+"</span><span class='username'> @"+post['username']+"</span></div><span>"+date+"</span></div>");
+            $('#'+post['ID']).append("<div class='user_and_date'><a style='color:white;' href='profile.php?user="+post['username']+"'><div class='user-info'><div class='profile-pic post-user-image' style='background-image: url("+post['avatar']+");'></div><span class='name'>"+post['Nombre']+"</span><span class='username'> @"+post['username']+"</span></div></a><span>"+edited+date+"</span></div>");
             $('#'+post['ID']).append("<div class='text-content'>"+post['content']+"</div>");
             if(post['image4'].length > 0){
                 $('#'+post['ID']).append("<div class='grid4'><div id='img-slide' data-order='1' class='grid4-img' style='background-image: url("+post['image']+")'></div><div id='img-slide' data-order='2' class='grid4-img' style='background-image: url("+post['image2']+")'></div><div id='img-slide' class='grid4-img' data-order='3' style='background-image: url("+post['image3']+")'></div><div id='img-slide' class='grid4-img' data-order='4' style='background-image: url("+post['image4']+")'></div>");
@@ -64,6 +95,8 @@ $(document).ready(function(){
                 $('#'+post['ID']).append("<div class='grid2'><div id='img-slide' class='grid2-img' data-order='1' style='background-image: url("+post['image']+")'></div><div id='img-slide' class='grid2-img' data-order='2' style='background-image: url("+post['image2']+")'></div></div>");
             } else if(post['image2'].length < 1 && post['image'].length > 0){
                 $('#'+post['ID']).append("<div class='grid1'><div id='img-slide' class='grid1-img' data-order='1' style='background-image: url("+post['image']+")'></div></div>");
+            } else if(post['map'].length > 0){
+                $('#'+post['ID']).append('<div style="position:relative; justify-content: center;" class="d-flex"><iframe width="800" height="400" style="border:0; border-radius: 5px;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCltQyssN-m8du_s3jHNjo3OjOar66Xg_s&q='+post['map']+'"></iframe></div>');
             }
 
             // If the post is liked by the current user, add correpondent class
@@ -85,7 +118,7 @@ $(document).ready(function(){
             // Add comment box
             $('#'+post['ID']).parent().append("<div class='form-comm' style='display:none; background-color: "+comment_color_class+"; margin-top:-20px;border-radius: 5px;' id='form-"+post['ID']+"'></div>")
             $('#form-'+post['ID']).append("<form class='comment-form' action='controllers/comment.php' enctype='multipart/form-data' method='POST' style='width: 100%;'><div class='d-flex flex-column' style='gap: 20px;'><div class='d-flex' style='gap: 20px; height: 40px;'><div class='profile-pic' style='height: 40px !important; width: 40px !important; background-image: url("+user_avatar+");'></div><input type='text' placeholder='Responde a "+post['Nombre']+"'id='content' name='content' class='search' style='padding: 10px; width: 100%;' value=''></div><div class='alert alert-danger alert-comm'role='alert'></div><div id='abajo-postear' class='d-flex justify-content-between' style='align-items:center;'><div class='div d-flex' id='icp' style='gap: 20px;'><label for=''><img style='cursor:pointer;' class='ico' width='20px' src='media/camara.svg' alt=''></label><label for='image'><img style='cursor:pointer;' class='ico' width='20px' src='media/imagen.svg' alt=''></label></div></div></form>");
-            $('#form-'+post['ID']+' #icp').append("<input type='text' name='post_id' id='post_id' style='display:none;' value='"+post['ID']+"'><input type='text' name='user_id' id='user_id' style='display:none;' value='"+user_id+"'><input style='display:none;' type='file' class='form-control' id='image' name='image' accept='image/*' /><a href='#'><img style='cursor:pointer;' class='ico' width='20px' src='media/enlace-alt.svg' alt=''></a><a href='#'><img style='cursor:pointer;' class='ico' width='20px' src='media/marcador.svg' alt=''></a></div>");
+            $('#form-'+post['ID']+' #icp').append("<input type='text' name='post_id' id='post_id' style='display:none;' value='"+post['ID']+"'><input type='text' name='user_id' id='user_id' style='display:none;' value='"+user_id+"'><input style='display:none;' type='file' class='form-control' id='image' name='image' accept='image/*' /><img style='cursor:pointer;' class='ico url-comment' width='20px' src='media/enlace-alt.svg' alt=''><a href='#'><img style='cursor:pointer;' class='ico' width='20px' src='media/marcador.svg' alt=''></a></div>");
             $('#form-'+post['ID']+' #abajo-postear').append("<button style='padding: 5px 30px;' class='btn-send-com btn btn-dark' type='submit'>Responder</button>");
 
             // If has comments, add them
@@ -93,6 +126,18 @@ $(document).ready(function(){
                 $('#form-'+post['ID']+' .comment-form').addClass("comment-form-line-bottom");
                 const comments = post['comments'];
                 for(let i=0;i<comments.length;i++){
+
+                    // Check if has a URL and convert it into an <a> element
+                    if(comments[i]['content'].includes('[url=')){
+                        url = comments[i]['content'].split('[url=')[1].split("]")[0];
+                        
+                        let text = comments[i]['content'].split(']')[1].split('[')[0];
+                        let regex = /\[url=.*\]/g;
+                        let contenido = comments[i]['content'].replace(regex,'<a target="_blank" href="'+ url +'">');
+                        contenido = contenido.split('>')
+                        contenido[0] += '>'+text+'</a>';
+                        comments[i]['content'] = contenido.join("");
+                    }
 
                     fecha = new Date(comments[i]['date']);
                     const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
@@ -127,6 +172,18 @@ $(document).ready(function(){
             $("#form-"+post_id).slideDown('fast');
         }
 
+        $("img.url-comment").on("click", function(){
+            $("#add_url").attr("data-type","comment");
+            console.log('click');
+            let post_id = $(this).parent().parent().parent().parent().parent().prev('div')[0].id;
+            $("#add_url").attr("data-id",post_id);
+            $("#add_url").modal({
+                escapeClose: false,
+                showClose: false,
+                clickClose: false
+            });
+        })
+
         // Function to send a comment. It stores the comment at the DB,
         // delete the current comments & add actualised comments.
         $(".btn-send-com").click(function(event){
@@ -156,6 +213,17 @@ $(document).ready(function(){
                             $('#form-'+post_id+' .alert-comm').hide();
                             parsed.forEach(function(new_comment, i){
                                 
+                                if(new_comment['content'].includes('[url=')){
+                                    url = new_comment['content'].split('[url=')[1].split("]")[0];
+                                    
+                                    let text = new_comment['content'].split(']')[1].split('[')[0];
+                                    let regex = /\[url=.*\]/g;
+                                    let contenido = new_comment['content'].replace(regex,'<a target="_blank" href="'+ url +'">');
+                                    contenido = contenido.split('>')
+                                    contenido[0] += '>'+text+'</a>';
+                                    new_comment['content'] = contenido.join("");
+                                }
+
                                 fecha = new Date(new_comment['date']);
                                 const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
                                 var minutes;
@@ -167,7 +235,12 @@ $(document).ready(function(){
                                 if(i>0){ class_comment = 'comment-topline'; } else { class_comment = ''; }
                                 $('#form-'+post_id).append("<div id='comment-"+new_comment['ID']+"' class='d-flex flex-column comment "+class_comment+"'></div>");
                                 $('#comment-'+new_comment['ID']).append("<div><div><div class='profile-pic post-user-image' style='background-image: url("+new_comment['avatar']+");'></div><span class='name'>"+new_comment['Nombre']+"</span><span class='username'> @"+new_comment['username']+"</span></div><span>"+date+"</span></div>");
-                                $('#comment-'+new_comment['ID']).append("<div class='d-flex justify-content-between'><div class='text-content'>"+new_comment['content']+"</div></div>");
+                                if(new_comment['username'] == $(".username")[0].innerHTML.slice(1)){
+                                    $('#comment-'+new_comment['ID']).append("<div class='d-flex justify-content-between'><div class='text-content'>"+new_comment['content']+"</div><div class='delete-comment-button'><img height=20px src='media/delete.png'></div></div>");
+                                } else{
+                                    $('#comment-'+new_comment['ID']).append("<div class='text-content'>"+new_comment['content']+"</div>");
+                                }
+                                //$('#comment-'+new_comment['ID']).append("<div class='d-flex justify-content-between'><div class='text-content'>"+new_comment['content']+"</div></div>");
                                 $.ajax("controllers/comment.php?type=count", {
                                     type: 'POST',
                                     dataType: 'text',
@@ -186,18 +259,40 @@ $(document).ready(function(){
                 $('#form-'+post_id+' .alert-comm').show();
             }
         })
+        })
     })
-})
+
+    }
+
+    loadPosts();
 
     $(document).on("click", "#img-slide", function(){
+
         $(".mySlides").find("img").remove();
         let post_id = $(this).parent().parent().attr("id");
         let imagenes = $("#"+post_id+" #img-slide");
-        console.log(imagenes);
         for(let i=0; i<imagenes.length; i++){
             src = imagenes[i].attributes[3].nodeValue.split("(")[1].slice(0, -1);
             $(".mySlides").append("<img class='slide"+(i+1)+"' src='"+src+"' style='width:100%; display:none;'>");
         }
+
+        $(".mySlides>img").each(function(){
+            $(this).on("load", function(){
+                if($(this).height() > $(this).width()){
+                    $(".mySlides>img").each(function(){
+                        $(this).css("height", "90vh");
+                    });
+                    $("#slideshow-container").css("min-width", "fit-content");
+                } else{
+                    $(".mySlides>img").each(function(){
+                        $(this).css("min-width", "50vw");
+                        $(this).css("width", "100%");
+                        $(this).css("max-height", "90vh");
+                    });
+                }
+            })
+        })
+
         let siblings = $(this).siblings().length + 1;
         let index = $(this).data("order");
         $(".slide"+index).addClass("slide-active");
@@ -214,11 +309,10 @@ $(document).ready(function(){
     })
 
     $(document).on("click", ".delete-post-button", function () {
+        $("#estas-seguro").attr('data-type','post');
+        $("#estas-seguro>div")[0].innerHTML = '<strong>¿Estás seguro que deseas eliminar este post?</strong>';
         let post_id = $(this).parent().parent().parent()[0].id;
-        if($("#estas-seguro>span")){
-            $("#estas-seguro>span").remove();
-        }
-        $("#estas-seguro").append("<span style='display:none;' value='"+post_id+"' />")
+        $("#estas-seguro").attr('data-id',post_id);
         $("#estas-seguro").modal({
             escapeClose: false,
             clickClose: false,
@@ -227,56 +321,115 @@ $(document).ready(function(){
     })
 
     $("#cerrar-delete-modal").click(function(){
+        $("#estas-seguro-comment").attr('data-id','');
+        $("#estas-seguro-comment").attr('data-type','');
         $.modal.close();
     });
 
     $("#confirmar-delete-modal").click(function(){
-        let post_id = $('#estas-seguro span').attr("value");
-        $.ajax( "controllers/post.php?type=delete", {
-            type: 'POST',
-            dataType: 'text',
-            data: {'post_id' : post_id}
-        }).then(function(respuesta){
-            if(respuesta == 'true'){
-                location.reload();
-            }
-        })
-    });
+        let type = $('#estas-seguro').attr("data-type");
+        let id = $('#estas-seguro').attr("data-id");
 
-    $(document).on("click", ".edit-post-button", function () {
-        let post_id = $(this).parent().parent().parent()[0].id;
-        let post_content = $("#"+post_id+" .text-content").text();
-        $("#text-edit-post").val(post_content);
-        if($("#edit-post>span")){
-            $("#edit-post>span").remove();
+        if(type == 'post'){
+            $.ajax( "controllers/post.php?type=delete", {
+                type: 'POST',
+                dataType: 'text',
+                data: {'post_id' : id}
+            }).then(function(respuesta){
+                if(respuesta == 'true'){
+                    $("#posts").children().remove();
+                    loadPosts();
+    
+                    $("#alert-warning").text('Post eliminado.');
+                    $.modal.close();
+                    $("#alert-warning").show('slow');
+                    setTimeout(function(){
+                        $("#alert-warning").hide('slow');
+                        $("#alert-warning").text('');
+                    }, 3000);
+                }
+            })
+        } else if(type == 'comment'){
+            $.ajax( "controllers/comment.php?type=delete", {
+                type: 'POST',
+                dataType: 'text',
+                data: {'comment_id' : id}
+            }).then(function(respuesta){
+                if(respuesta == 'true'){
+                    $("#posts").children().remove();
+                    loadPosts();
+    
+                    $("#alert-warning").text('Comentario eliminado.');
+                    $.modal.close();
+                    $("#alert-warning").show('slow');
+                    setTimeout(function(){
+                        $("#alert-warning").hide('slow');
+                        $("#alert-warning").text('');
+                    }, 3000);
+                }
+            });
         }
-        $("#edit-post").append("<span style='display:none;' value='"+post_id+"' />")
-        $("#edit-post").modal({
-            escapeClose: false,
-            clickClose: false,
-            showClose: false
-        });
     });
 
     $("#cerrar-edit-modal").click(function(){
         $('#alert-edit-post').text("");
         $('#alert-edit-post').hide();
+        let input =  $('#edit-post input[type="file"]');
+        let parent = input.parent();
+        input.remove();
+        parent.append('<input style="display:none;" type="file" class="form-control img-edit" id="edit-image" name="edit-image[]" accept="image/*" multiple="">');
         $.modal.close();
     });
 
     $("#confirmar-edit-modal").click(function(){
         let content = $("#text-edit-post").val();
+        let existingImages = $("#edit-existing-images>div:not(#output-container)");
+        let eImages = [];
+        let a = 0;
+        for(let image of existingImages){
+            eImages[a] = image.outerHTML.substring(image.outerHTML.indexOf('(')+1, image.outerHTML.indexOf(')'));
+            a++;
+        }
+        let images = $("#edit-post input[type='file']")[0].files;
+        let post_id = $('#edit-post>span').attr("value");
+        let formData = new FormData();
+        for(let image of images){
+            formData.append('images[]', image);
+        }
+
+        let data = {'post_id' : post_id,
+                    'content' : content,
+                    'eimages' : JSON.stringify(eImages)};
+
+        formData.append('data', JSON.stringify(data));
+        console.log(formData);
         if(content != ''){
-            let post_id = $('#edit-post span').attr("value");
             $.ajax( "controllers/post.php?type=edit", {
                 type: 'POST',
-                dataType: 'text',
-                data: {'post_id' : post_id,
-                        'content' : content}
+                data: formData,
+                processData:false,
+                contentType: false
             }).then(function(respuesta){
                 console.log(respuesta);
                 if(respuesta == 'true'){
-                    location.reload();
+                    $("#posts").children().remove();
+                    loadPosts();
+                    $.modal.close();
+                    $("#alert-success").text('Post editado.');
+                    $("#alert-success").show('slow');
+                    setTimeout(function(){
+                        $("#alert-success").hide('slow');
+                    }, 3000);
+                    $("html, body").animate({ scrollTop: 0 }, 600);
+
+                } else if(respuesta == 'false'){
+                    $.modal.close();
+                    $('#alert-danger').text("Ha ocurrido un error editando el post.");
+                    $("#alert-danger").show('slow');
+                    setTimeout(function(){
+                        $("#alert-danger").hide('slow');
+                        $("#alert-danger").text('');
+                    }, 3000);
                 }
             })
         } else {
@@ -286,61 +439,54 @@ $(document).ready(function(){
     });
 
     $(document).on("click", ".delete-comment-button", function () {
+        $("#estas-seguro").attr('data-type','comment');
+        console.log($("#estas-seguro>div"));
+        $("#estas-seguro>div")[0].innerHTML = '<strong>¿Estás seguro que deseas eliminar este comentario?</strong>';
         let form_id = $(this).parent().parent().attr('id');
         let comment_id = form_id.split('-')[1];
         
-        $("#estas-seguro-comment").modal({
+        $("#estas-seguro").modal({
             escapeClose: false,
             clickClose: false,
             showClose: false
         });
 
-        $("#estas-seguro-comment").append("<span id='"+comment_id+"' style='display:none;'></span>");
-    });
-
-    $("#cerrar-delete-modal-comment").click(function(){
-        $.modal.close();
+        $("#estas-seguro").attr('data-id',comment_id);
     });
 
     $("#confirmar-delete-modal-comment").click(function(){
         let comment_id = $("#"+$(this).parent().parent().attr('id')+" span").attr('id');
-        $.ajax( "controllers/comment.php?type=delete", {
-            type: 'POST',
-            dataType: 'text',
-            data: {'comment_id' : comment_id}
-        }).then(function(respuesta){
-            if(respuesta == 'true'){
-                location.reload();
-            }
-        })
-    });
+        
+    })
     
     // Function that executes every 0.5 seconds, reads and update number of likes on each post.
     function refreshLikes(){
         $.ajax( "controllers/posts.php?type="+type, {
             type: 'POST',
-            dataType: 'json',
+            dataType: 'text',
             data: {'user_id' : user_id}
         }).then(function(respuesta){
+            respuesta = JSON.parse(respuesta);
             for(var post of respuesta){
                 $('#'+post['ID']+' #likes-count').text(post['likes']);
             }
         })
     };
+
     setInterval(refreshLikes, 500);
 
     // Function for make likes and unlikes
-    $(document).on("click", ".like", function () {
-        let post_id = $(this).parent().parent().attr("id");
+    $(document).on("click", ".pulgar", function () {
+        let post_id = $(this).parent().parent().parent().attr("id");
         // If is already liked, send request to unlike & remove liked class
-        if($(this).hasClass('liked')){
+        if($(this).parent().hasClass('liked')){
             $.ajax("controllers/likes.php?type=unlike",{
                 type: 'POST',
                 dataType: 'bool',
                 data: {'user_id' : user_id,
                         'post_id' : post_id}
             });
-            $(this).removeClass('liked');
+            $(this).parent().removeClass('liked');
         }else{
             // If is not liked, send request to like & add liked class
             $.ajax("controllers/likes.php?type=like",{
@@ -349,7 +495,175 @@ $(document).ready(function(){
                 data: {'user_id' : user_id,
                         'post_id' : post_id}
             });
-            $(this).addClass('liked');
+            $(this).parent().addClass('liked');
         }
     });
-})
+
+    /////////////// Infinite Scroll //////////////////////////
+    $(window).scroll(function () {
+        if($("#posts>div").length > 0){
+        // End of the document reached?
+        if ($(document).height() - $(this).height() == $(this).scrollTop()) {
+                $("body").append("<div class='loader'></div>");
+                //Get posts and display them
+                let user_id = $("#user_id").text();
+                let user_avatar = $(".profile-pic")[0].style.backgroundImage.slice(4, -1).replace(/"/g, "");
+                let user_username = $(".username")[0].innerHTML.slice(1);
+                let type;
+            
+                // Define type of request depending of the page
+                if($('#home').hasClass('active')){
+                    type = 'userScroll';
+                } else{
+                    type='allScroll';
+                }
+
+                var countPost = $("#posts>div").length/2;
+            
+                // Ajax request
+                $.ajax( "controllers/posts.php?type="+type, {
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {'user_id' : user_id,
+                                    'offset_value' : countPost}
+                }).then(function(respuesta){
+                    console.log(respuesta);
+                    if(respuesta.length > 0){
+                    // Get the color_mode cookie & display posts with the correspondent class
+                    let cook = getCookie("color_mode");
+                    for(var post of respuesta){
+                            
+                        let color_class;
+                        let coment_color_class;
+                        let liked_class;
+            
+                        // Format date got from the DB in posts
+                        fecha = new Date(post['date']);
+                        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
+                        var minutes;
+                        if(fecha.getMinutes() < 10){minutes = "0"+fecha.getMinutes();} else {minutes = fecha.getMinutes();}
+                        var date = fecha.getDate()+" de "+meses[fecha.getMonth()]+" a las "+fecha.getHours()+":"+minutes;
+            
+                        if(cook == "dark"){
+                            color_class = "post-dark";
+                            comment_color_class = 'rgb(26 30 45)';
+            
+                        } else if(cook == "light" || cook == null){
+                            color_class = "post-light";
+                            comment_color_class = 'rgb(13 87 151 / 65%)';
+                        }
+            
+                        if(post['content'].includes('[url=')){
+                            url = post['content'].split('[url=')[1].split("]")[0];
+                            
+                            let text = post['content'].split(']')[1].split('[')[0];
+                            let regex = /\[url=.*\]/g;
+                            let contenido = post['content'].replace(regex,'<a target="_blank" href="'+ url +'">');
+                            contenido = contenido.split('>')
+                            contenido[0] += '>'+text+'</a>';
+                            post['content'] = contenido.join("");
+                        }
+            
+                        let edited = '';
+                        if(post['edited'] == 1){
+                            edited = "<small style='margin-right: 5px;'>edited on</small>";
+                        } else{
+                            edited = '';
+                        }
+            
+                        // Append each post
+                        $('#posts').append("<div id='"+post['ID']+"' class='d-flex flex-column post " + color_class + "'></div>");
+                        $('#'+post['ID']).append("<div class='user_and_date'><a style='color:white;' href='profile.php?user="+post['username']+"'><div class='user-info'><div class='profile-pic post-user-image' style='background-image: url("+post['avatar']+");'></div><span class='name'>"+post['Nombre']+"</span><span class='username'> @"+post['username']+"</span></div></a><span>"+edited+date+"</span></div>");
+                        $('#'+post['ID']).append("<div class='text-content'>"+post['content']+"</div>");
+                        if(post['image4'].length > 0){
+                            $('#'+post['ID']).append("<div class='grid4'><div id='img-slide' data-order='1' class='grid4-img' style='background-image: url("+post['image']+")'></div><div id='img-slide' data-order='2' class='grid4-img' style='background-image: url("+post['image2']+")'></div><div id='img-slide' class='grid4-img' data-order='3' style='background-image: url("+post['image3']+")'></div><div id='img-slide' class='grid4-img' data-order='4' style='background-image: url("+post['image4']+")'></div>");
+                        } else if(post['image4'].length < 1 && post['image3'].length > 0){
+                            $('#'+post['ID']).append("<div class='grid3'><div id='img-slide' class='grid3-img' data-order='1' style='background-image: url("+post['image']+")'></div><div id='img-slide' class='grid3-img' data-order='2' style='background-image: url("+post['image2']+")'></div><div id='img-slide' class='grid3-img grid3-imgbot' data-order='3' style='background-image: url("+post['image3']+")'></div>");
+                        } else if(post['image3'].length < 1 && post['image2'].length > 0){
+                            $('#'+post['ID']).append("<div class='grid2'><div id='img-slide' class='grid2-img' data-order='1' style='background-image: url("+post['image']+")'></div><div id='img-slide' class='grid2-img' data-order='2' style='background-image: url("+post['image2']+")'></div></div>");
+                        } else if(post['image2'].length < 1 && post['image'].length > 0){
+                            $('#'+post['ID']).append("<div class='grid1'><div id='img-slide' class='grid1-img' data-order='1' style='background-image: url("+post['image']+")'></div></div>");
+                        } else if(post['map'].length > 0){
+                            $('#'+post['ID']).append('<div style="position:relative; justify-content: center;" class="d-flex"><iframe width="800" height="400" style="border:0; border-radius: 5px;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCltQyssN-m8du_s3jHNjo3OjOar66Xg_s&q='+post['map']+'"></iframe></div>');
+                        }
+            
+                        // If the post is liked by the current user, add correpondent class
+                        if(post['liked'] == 1){
+                            liked_class = 'liked';
+                        } else {
+                            liked_class = '';
+                        }
+            
+                        $('#'+post['ID']).append("<div class='likes_comment_count' style='display:flex; gap:10px; align-items: center;position:relative;' id='count' class='d-flex'><div class='likes-count "+liked_class+"'><a id='likes' href='likes.php?id="+post['ID']+"' rel='modal:open'><span id='likes-count'>"+post['likes']+"</span><span> Likes</span></a></div></div>");
+                        $('#'+post['ID']+' #count').append("<div class='likes-count "+liked_class+"'><a class='comments-button' style='cursor: pointer;'><span id='comments-count'>"+post['count-comm']+"</span><span> Comment</span></a></div>");
+            
+                        $('#'+post['ID']).append("<div style='gap:10px; align-items: center;position:relative;' id='likes-com' class='d-flex'><div class='like "+liked_class+"'><img class='pulgar' height=20px src='media/like.png'></div></div>");
+            
+                        if(post['username'] == user_username){
+                            $('#'+post['ID']+' #likes-com').append("<div class='edit-delete-buttons'><div class='delete-post-button'><img height=20px src='media/delete.png'></div><div class='edit-post-button'><img height=20px src='media/edit.png'></div></div>");
+                        }
+            
+                        // Add comment box
+                        $('#'+post['ID']).parent().append("<div class='form-comm' style='display:none; background-color: "+comment_color_class+"; margin-top:-20px;border-radius: 5px;' id='form-"+post['ID']+"'></div>")
+                        $('#form-'+post['ID']).append("<form class='comment-form' action='controllers/comment.php' enctype='multipart/form-data' method='POST' style='width: 100%;'><div class='d-flex flex-column' style='gap: 20px;'><div class='d-flex' style='gap: 20px; height: 40px;'><div class='profile-pic' style='height: 40px !important; width: 40px !important; background-image: url("+user_avatar+");'></div><input type='text' placeholder='Responde a "+post['Nombre']+"'id='content' name='content' class='search' style='padding: 10px; width: 100%;' value=''></div><div class='alert alert-danger alert-comm'role='alert'></div><div id='abajo-postear' class='d-flex justify-content-between' style='align-items:center;'><div class='div d-flex' id='icp' style='gap: 20px;'><label for=''><img style='cursor:pointer;' class='ico' width='20px' src='media/camara.svg' alt=''></label><label for='image'><img style='cursor:pointer;' class='ico' width='20px' src='media/imagen.svg' alt=''></label></div></div></form>");
+                        $('#form-'+post['ID']+' #icp').append("<input type='text' name='post_id' id='post_id' style='display:none;' value='"+post['ID']+"'><input type='text' name='user_id' id='user_id' style='display:none;' value='"+user_id+"'><input style='display:none;' type='file' class='form-control' id='image' name='image' accept='image/*' /><img style='cursor:pointer;' class='ico url-comment' width='20px' src='media/enlace-alt.svg' alt=''><a href='#'><img style='cursor:pointer;' class='ico' width='20px' src='media/marcador.svg' alt=''></a></div>");
+                        $('#form-'+post['ID']+' #abajo-postear').append("<button style='padding: 5px 30px;' class='btn-send-com btn btn-dark' type='submit'>Responder</button>");
+            
+                        // If has comments, add them
+                        if(post['comments'].length>0){
+                            $('#form-'+post['ID']+' .comment-form').addClass("comment-form-line-bottom");
+                            const comments = post['comments'];  
+                            for(let i=0;i<comments.length;i++){
+            
+                                // Check if has a URL and convert it into an <a> element
+                                if(comments[i]['content'].includes('[url=')){
+                                    url = comments[i]['content'].split('[url=')[1].split("]")[0];
+                                    
+                                    let text = comments[i]['content'].split(']')[1].split('[')[0];
+                                    let regex = /\[url=.*\]/g;
+                                    let contenido = comments[i]['content'].replace(regex,'<a target="_blank" href="'+ url +'">');
+                                    contenido = contenido.split('>')
+                                    contenido[0] += '>'+text+'</a>';
+                                    comments[i]['content'] = contenido.join("");
+                                }
+            
+                                fecha = new Date(comments[i]['date']);
+                                const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
+                                var minutes;
+                                if(fecha.getMinutes() < 10){minutes = "0"+fecha.getMinutes();} else {minutes = fecha.getMinutes();}
+                                var date = fecha.getDate()+" de "+meses[fecha.getMonth()]+" a las "+fecha.getHours()+":"+minutes;
+            
+                                let class_comment;
+                                if(i>0){ class_comment = 'comment-topline'; } else { class_comment = ''; }
+                                
+                                // Add each comment
+                                $('#form-'+post['ID']).append("<div id='comment-"+comments[i]['ID']+"' class='d-flex flex-column comment "+class_comment+"'></div>");
+                                $('#comment-'+comments[i]['ID']).append("<div><div><div class='profile-pic post-user-image' style='background-image: url("+comments[i]['avatar']+");'></div><span class='name'>"+comments[i]['Nombre']+"</span><span class='username'> @"+comments[i]['username']+"</span></div><span>"+date+"</span></div>");
+                                if(comments[i]['username'] == user_username){
+                                    $('#comment-'+comments[i]['ID']).append("<div class='d-flex justify-content-between'><div class='text-content'>"+comments[i]['content']+"</div><div class='delete-comment-button'><img height=20px src='media/delete.png'></div></div>");
+                                } else{
+                                    $('#comment-'+comments[i]['ID']).append("<div class='text-content'>"+comments[i]['content']+"</div>");
+                                }
+                                
+                                if(comments[i]['image'].length > 0){
+                                $('#comment-'+comments[i]['ID']).append("<img src='"+comments[i]['image']+"'>");
+                                }
+                            }
+                        }
+                    }
+                    } else{
+                        $("#alert-success").text('No hay más post por cargar.');
+                        $("#alert-success").show('slow');
+                        setTimeout(function(){
+                            $("#alert-success").hide('slow');
+                        }, 3000);
+                    }
+                $("div.loader").remove();
+                })
+    }
+    };
+    })
+    /////////////////
+
+    $("#sugerencias-amistad").append("<div>Aqui irán las sugerencias de amistad varias.</div>");
+});

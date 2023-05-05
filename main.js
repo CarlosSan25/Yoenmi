@@ -36,8 +36,6 @@ window.onload = function(){
             element.style.filter = "invert(100%)";
         });
         qs(".weather").style.color = "white";
-        qs(".mainframe").style.backgroundColor = "#17181c";
-        qs(".whats-new").style.backgroundColor =  "#1e1f23";
         var search = qsA(".search");
         search.forEach(function(element){
             element.style.backgroundColor = "#686864";
@@ -64,8 +62,6 @@ window.onload = function(){
             element.style.filter = "invert(0)";
         });
         qs(".weather").style.color = "white";
-        qs(".mainframe").style.backgroundColor = "white";
-        qs(".whats-new").style.backgroundColor =  "#0160b157";
         var search = qsA(".search");
         search.forEach(function(element){
             element.style.backgroundColor = "white";
@@ -97,8 +93,6 @@ window.onload = function(){
                 element.style.filter = "invert(100%)";
             });
             qs(".weather").style.color = "white";
-            qs(".mainframe").style.backgroundColor = "#17181c";
-            qs(".whats-new").style.backgroundColor =  "#1e1f23";
             var search = qsA(".search");
             search.forEach(function(element){
                 element.style.backgroundColor = "#686864";
@@ -128,8 +122,6 @@ window.onload = function(){
                 element.style.filter = "invert(0)";
             });
             qs(".weather").style.color = "white";
-            qs(".mainframe").style.backgroundColor = "white";
-            qs(".whats-new").style.backgroundColor =  "#0160b157";
             var search = qsA(".search");
             search.forEach(function(element){
                 element.style.backgroundColor = "white";
@@ -239,9 +231,9 @@ window.onload = function(){
 
         let filesList = [];
         const classDragOver = "drag-over";
-        const fileInputMulti = document.querySelector("input#image");
+        const fileInputMulti = document.querySelectorAll("input.form-control");
         // DEMO Preview
-        const multiSelectorUniqPreview = document.querySelector("output");
+        let multiSelectorUniqPreview = '';
 
 
          // Returns the index of an Array of Files from its name. If there are multiple files with the same name, the last one will be returned.
@@ -288,7 +280,7 @@ window.onload = function(){
         function renderPreviews(currentFileList, target, inputFile) {
             target.textContent = "";
             currentFileList.forEach((file, index) => {
-                document.getElementById('output-container').style.display = 'block';
+                multiSelectorUniqPreview.parentNode.style.display = 'block';
                 const myLi = document.createElement("li");
                 myLi.classList.add('output-image');
                 myLi.style.backgroundImage = 'url('+URL.createObjectURL(file)+')';
@@ -334,17 +326,54 @@ window.onload = function(){
 
 
         // Input file
-        fileInputMulti.addEventListener("input", async () => {
-            // Get files list from <input>
-            const newFilesList = Array.from(fileInputMulti.files);
-            // Update list files
-            filesList = await getUniqFiles(newFilesList, filesList);
-            // Only DEMO. Redraw
-            renderPreviews(filesList, multiSelectorUniqPreview, fileInputMulti);
-            // Set data to input
-            fileInputMulti.files = arrayFilesToFileList(filesList);
-            console.log(fileInputMulti.files);
-        });
+        for (const input of fileInputMulti){
+            input.addEventListener("input", async (event) => {
+                if(event.target.classList.contains("img-edit")){
+                    multiSelectorUniqPreview = document.getElementById("edit-output");
+                    let count_images = $("#edit-existing-images>div").length;
+                    let dt = new DataTransfer();
+                    switch (count_images) {
+                        case 5:
+                            input.files = dt.files;
+                            break;
+                        
+                        case 4:
+                            for(let i=0; i<1; i++){
+                                console.log(input.files);
+                                dt.items.add(input.files[i]);
+                            }
+                            input.files = dt.files;
+                            break;
+                        case 3:
+                            for(let i=0; i<2; i++){
+                                if(input.files[i] != undefined){
+                                    dt.items.add(input.files[i]);
+                                }
+                            }
+                            input.files = dt.files;
+                            break;
+                        case 2: 
+                            for(let i=0; i<3; i++){
+                                if(input.files[i] != undefined){
+                                    dt.items.add(input.files[i]);
+                                }
+                            }
+                            input.files = dt.files;
+                            break;
+                    }
+                } else{
+                    multiSelectorUniqPreview = document.getElementById("post-output");
+                }
+                // Get files list from <input>
+                const newFilesList = Array.from(input.files);
+                // Update list files
+                filesList = await getUniqFiles(newFilesList, filesList);
+                // Only DEMO. Redraw
+                renderPreviews(filesList, multiSelectorUniqPreview, input);
+                // Set data to input
+                input.files = arrayFilesToFileList(filesList);
+            });
+        }
 
         // Drag and drop
 
@@ -384,8 +413,6 @@ window.onload = function(){
         }
 
         
-
-        
         let slideIndex = 1;
         showSlides(slideIndex);
 
@@ -422,10 +449,15 @@ window.onload = function(){
             }
         });
 
+        if($("#content").val().length == 0){
+            $("#post-submit").prop("disabled", true);
+        }
+
         $("#content").on("input",function(){
             if($(this).val().length > 0){
                 $("#max-content").css("display", "block");
                 $("#max-content").text($(this).val().length+" / 280");
+                $("#post-submit").prop("disabled", false);
                 if($(this).val().length > 260){
                     $("#max-content").css("color", "red");
                     if($(this).val().length > 280){
@@ -438,6 +470,232 @@ window.onload = function(){
                 }
             } else if ($(this).val().length == 0) {
                 $("#max-content").css("display", "none");
+                $("#post-submit").prop("disabled", true);
             }
         })
+
+        $("#url-post").on("click", function(){
+            $("#add_url").attr("data-type","post");
+            $("#add_url").modal({
+                escapeClose: false,
+                showClose: false
+            });
+        })
+
+        $("#confirmar-url-modal").on("click", function(){
+            let type = $("#add_url").attr('data-type');
+            let text = "";
+            let url = "";
+
+            $(this).parent().parent().find("input").each(function(){
+                if(this.name == "texto"){
+                    text = this.value;
+                } else{
+                    url = this.value;
+                }
+            });
+
+            if(type == "post"){
+                let val = $("input#content").val();
+                $("input#content").val(val+" [url="+url+"]"+text+"[/url]");
+                $.modal.close();
+            } else if(type == "comment"){
+                let post_id = $("#add_url").attr('data-id');
+                let input = $("#"+post_id).next().find('input#content');
+                let val = input.val();
+                input.val(val+" [url="+url+"]"+text+"[/url]");
+                $.modal.close();
+                $("#add_url input").each(function(){
+                    $(this).val("");
+                })
+            }
+        })
+
+        $("#cerrar-url-modal").click(function(){
+            $("#add_url").removeAttr("data-type");
+            $("#add_url").removeAttr("data-id");
+            $("#add_url input").each(function(){
+                $(this).val("");
+            })
+            $.modal.close();
+        });
+
+        $(document).on("click", ".edit-post-button", function () {
+            let post_id = $(this).parent().parent().parent()[0].id;
+            let input = $("#edit-post input[type='file']");
+            console.log(input[0].files);
+            $.ajax("controllers/posts.php?type=unique", {
+                type: 'POST',
+                dataType: 'text',
+                data: {'post_id' : post_id}
+            }).then(function(respuesta){
+                respuesta = JSON.parse(respuesta);
+                let post_content = respuesta[0]['content'];
+                $("#text-edit-post").val(post_content);
+                let count_images = 0;
+                $("#edit-existing-images>div").remove();
+                $("#edit-existing-images").removeAttr('class');
+
+                if(respuesta[0]['image'].length > 0){
+                    images = [respuesta[0]['image'], respuesta[0]['image2'], respuesta[0]['image3'], respuesta[0]['image4']];
+                    for(let image of images){
+                        if(image.length>0){
+                            $("#edit-existing-images").append("<div style='background-image: url("+image+")'></div>")
+                            count_images++
+                        }
+                    }
+                }
+
+                $("#edit-existing-images").append("<div id='output-container' style='display:none; padding:0px 15px;'><output id='edit-output'></output></div>");
+                $("#edit-post span")[0].innerText = "Introduce hasta "+(4-count_images)+" imágen/es mas.";
+                let last = $("#edit-existing-images").children().last();
+                switch (count_images) {
+                    case 4:
+                        $("#edit-existing-images").addClass('grid4');
+                        $("#edit-existing-images>div").addClass('grid4-img');
+                        break;
+                    case 3:
+                        $("#edit-existing-images").addClass('grid3');
+                        $("#edit-existing-images>div").addClass('grid3-img');
+                        console.log($("#edit-existing-images:lastChild"));
+                        last.addClass('grid3-imgbot');
+                        break;
+                    case 2:
+                        $("#edit-existing-images").addClass('grid3');
+                        $("#edit-existing-images>div").addClass('grid2-img');
+                        last.addClass('grid3-imgbot');
+                        break;
+                    case 1:
+                        $("#edit-existing-images").addClass('grid3');
+                        $("#edit-existing-images>div").addClass('grid1-img');
+                        last.addClass('grid3-imgbot');
+                        break;
+                }
+            })
+    
+        if($("#edit-post>span")){
+            $("#edit-post>span").remove();
+        }
+        $("#edit-post").append("<span style='display:none;' value='"+post_id+"' />")
+        $("#edit-post").modal({
+            escapeClose: false,
+            showClose: false,
+            clickClose: false
+        });
+        });
+
+        $("img.url-comment").on("click", function(){
+            $("#add_url").attr("data-type","comment");
+            console.log('click');
+            let post_id = $(this).parent().parent().parent().parent().parent().prev('div')[0].id;
+            $("#add_url").attr("data-id",post_id);
+            $("#add_url").modal({
+                escapeClose: false,
+                showClose: false,
+                clickClose: false
+            });
+        })
+
+        $("img#ubicacion-post").on("click", function(){
+            $("#ubicacion-modal").modal({
+                escapeClose: false,
+                showClose: false,
+                clickClose: false
+            });
+        })
+
+        $("#insert-coords").on("click", function(){
+            if($("#lugar").val() == ''){
+                if($("#longitud").val() != '' && $("#latitude").val() != ''){
+                    if($("#map").children().length > 0){
+                        $("#map").children().remove();
+                    }
+
+                    $("#map").append('<div style="position:relative;"><iframe width="800" height="400" style="border:0; border-radius: 5px;"loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCltQyssN-m8du_s3jHNjo3OjOar66Xg_s&q='+$("#latitude").val()+','+$("#longitud").val()+'"></iframe></div>');
+                    $("#map>div").append("<div id='map-off' class='map-off'>X</div>")
+                    $("#map").show();
+                    $("input#input-map").val($("#latitude").val()+','+$("#longitud").val());
+                    $("input#image").prop("disabled", true);
+                    $("img#ico-images").css("cursor","not-allowed");
+                    $("#longitud").val() = '';
+                    $("#latitude").val() = '';
+                    $.modal.close();
+
+                    $("div#map-off").on('click', function(){
+                        $("#map").children().remove();
+                        $("#map").hide();
+                        $("input#input-map").val('');
+                        $("input#image").prop("disabled", false);
+                        $("img#ico-images").css("cursor","pointer");
+                        console.log($("input#input-map").val());
+                    })
+                }            
+            } else{
+
+                if($("#map").children().length > 0){
+                    $("#map").children().remove();
+                }
+
+                $("#map").append('<div style="position: relative;"><iframe width="800" height="400" style="border:0; border-radius: 5px;"loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCltQyssN-m8du_s3jHNjo3OjOar66Xg_s&q='+$("#lugar").val()+'"></iframe></div>');
+                $("#map>div").append("<div id='map-off' class='map-off'>X</div>")
+                $("#map").show();
+                $("input#input-map").val($("#lugar").val());
+                $("input#image").prop("disabled", true);
+                $("img#ico-images").css("cursor","not-allowed");
+                $("input#lugar").val('');
+                $.modal.close();
+
+                $("div#map-off").on('click', function(){
+                    $("#map").children().remove();
+                    $("#map").hide();
+                    $("input#input-map").val('');
+                    $("input#image").prop("disabled", false);
+                    $("img#ico-images").css("cursor","pointer");
+                    console.log($("input#input-map").val());
+                })
+            }
+        });
+
+        $("#detect-ubic").on("click", function(){
+            if (!"geolocation" in navigator){
+                console.log("Tu navegador no soporta la autodetección de tu ubicación.");
+            } else{
+                const onUbicacionConcedida = ubicacion => {
+                    if($("#map").children().length > 0){
+                        $("#map").children().remove();
+                    }
+                    console.log("Tengo la ubicación: ", ubicacion.coords);
+                    $("#map").append('<div style="position:relative;"><iframe width="800" height="400" style="border:0; border-radius: 5px;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCltQyssN-m8du_s3jHNjo3OjOar66Xg_s&q='+ubicacion.coords['latitude']+','+ubicacion.coords['longitude']+'"></iframe></div>');
+                    $("#map>div").append("<div id='map-off' class='map-off'>X</div>")
+                    $("#map").show();
+                    $("input#input-map").val(ubicacion.coords['latitude']+','+ubicacion.coords['longitude']);
+                    $("input#image").prop("disabled", true);
+                    $("img#ico-images").css("cursor","not-allowed");
+                    $.modal.close();
+
+                    $("div#map-off").on('click', function(){
+                        $("#map").children().remove();
+                        $("#map").hide();
+                        $("input#input-map").val('');
+                        $("input#image").prop("disabled", false);
+                        $("img#ico-images").css("cursor","pointer");
+                        console.log($("input#input-map").val());
+                    })
+                }
+                const onErrorDeUbicacion = err => {
+                    console.log("Error obteniendo ubicación: ", err);
+                }
+                const opcionesDeSolicitud = {
+                    enableHighAccuracy: true, // Alta precisión
+                    maximumAge: 0, // No queremos caché
+                    timeout: 5000 // Esperar solo 5 segundos
+                };
+                // Solicitar
+                navigator.geolocation.getCurrentPosition(onUbicacionConcedida, onErrorDeUbicacion, opcionesDeSolicitud);
+            }
+        });
+
+        $("#cerrar-ubic-modal").click(function(){
+            $.modal.close();
+        });
 }

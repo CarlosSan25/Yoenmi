@@ -45,10 +45,10 @@ class DB{
         return $password;
     }
 
-    public function insertUser($n, $u, $p, $i){
+    public function insertUser($n, $u, $p, $i, $b, $pr){
         $phash = new Password;
         $password = $phash->hash($p);
-        $stmt = $this->conn->prepare("INSERT INTO users (nombre, username, password, avatar) VALUES ('$n','$u','$password', '$i');");
+        $stmt = $this->conn->prepare("INSERT INTO users (nombre, username, password, avatar, banner, private) VALUES ('$n','$u','$password', '$i', '$b', '$pr');");
         return $stmt->execute();
     }
 
@@ -64,14 +64,22 @@ class DB{
         return $result;
     }
 
-    public function insertPost($user_id, $content, $image1, $image2, $image3, $image4){
-        $query = "INSERT INTO posts (user_id, content, image, image2, image3, image4) VALUES ('$user_id', '$content', '$image1', '$image2', '$image3', '$image4');";
+    public function insertPost($user_id, $content, $image1, $image2, $image3, $image4, $map){
+        $query = "INSERT INTO posts (user_id, content, image, image2, image3, image4, map) VALUES ('$user_id', '$content', '$image1', '$image2', '$image3', '$image4', '$map');";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
     }
 
     public function getPosts($user_id){
-        $query = "SELECT posts.*, users.Nombre, users.username, users.avatar FROM posts, users WHERE users.ID = '$user_id' AND users.ID = posts.user_id ORDER BY `date` DESC;";
+        $query = "SELECT posts.*, users.Nombre, users.username, users.avatar FROM posts, users WHERE users.ID = '$user_id' AND users.ID = posts.user_id ORDER BY `date` DESC LIMIT 0, 5;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function getPostsScroll($user_id, $offset_value){
+        $query = "SELECT posts.*, users.Nombre, users.username, users.avatar FROM posts, users WHERE users.ID = '$user_id' AND users.ID = posts.user_id ORDER BY `date` DESC LIMIT $offset_value, 5;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -79,7 +87,23 @@ class DB{
     }
 
     public function getAllPosts(){
-        $query = "SELECT posts.*, users.Nombre, users.username, users.avatar FROM posts, users WHERE users.ID = posts.user_id ORDER BY `date` DESC;";
+        $query = "SELECT posts.*, users.Nombre, users.username, users.avatar FROM posts, users WHERE users.ID = posts.user_id ORDER BY `date` DESC LIMIT 0, 5;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function getAllPostsScroll($offset_value){
+        $query = "SELECT posts.*, users.Nombre, users.username, users.avatar FROM posts, users WHERE users.ID = posts.user_id ORDER BY `date` DESC LIMIT $offset_value, 5;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function getUniquePost($post_id){
+        $query = "SELECT * FROM posts WHERE ID = '$post_id' ORDER BY `date` DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -92,8 +116,8 @@ class DB{
         if($stmt->execute()){return "true";} else {return "false";}
     }
 
-    public function editPost($post_id, $content){
-        $query = "UPDATE posts SET content='$content' WHERE ID = '$post_id';";
+    public function editPost($post_id, $content, $image, $image2, $image3, $image4){
+        $query = "UPDATE posts SET content='$content', image='$image', image2='$image2', image3='$image3', image4='$image4', edited='1' WHERE ID = '$post_id';";
         $stmt = $this->conn->prepare($query);
         if($stmt->execute()){return "true";} else {return "false";}
     }
@@ -154,6 +178,18 @@ class DB{
         $query = "DELETE FROM comments WHERE ID = '$comment_id';";
         $stmt = $this->conn->prepare($query);
         if($stmt->execute()){return 'true';} else {return 'false';}
+    }
+
+    public function updatePhoto($user_id,$url){
+        $query = "UPDATE users SET avatar='$url' WHERE ID = '$user_id';";
+        $stmt = $this->conn->prepare($query);
+        if($stmt->execute()){return "true";} else {return "false";}
+    }
+
+    public function updateBanner($user_id,$url){
+        $query = "UPDATE users SET banner='$url' WHERE ID = '$user_id';";
+        $stmt = $this->conn->prepare($query);
+        if($stmt->execute()){return "true";} else {return "false";}
     }
 }
 
