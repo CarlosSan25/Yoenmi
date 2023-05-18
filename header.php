@@ -34,7 +34,7 @@ if(isset($_COOKIE["usuario"])){
         <img src="media/up.png" height="20px;"></img>
     </a>
     <div class="row">
-        <div class="col-3 d-flex flex-column left-side" style="padding: 30px;">
+        <div class="col-3 flex-column left-side" style="padding: 30px;">
             <div class="d-flex flex-column" style="gap: 20px; width: 22vw; position:fixed;">
                 <div class="logo">
                     <a href="welcome.php" class="d-flex align-items-center">

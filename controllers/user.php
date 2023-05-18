@@ -38,6 +38,51 @@ if($_GET['type'] == 'getData'){
             }
         }
     } else{ echo 'error'; }
+} else if($_GET['type'] == 'checkPrivacy'){
+    $username = $_POST['username'];
+    $stmt = $conn->checkPrivacy($username);
+    echo json_encode($stmt);
+}else if($_GET['type'] == 'checkFollow'){
+    $follower = $_POST['follower'];
+    $following = $_POST['following'];
+    $stmt = $conn->checkFollow($follower,$following);
+    echo json_encode($stmt);
+}  else if($_GET['type'] == 'addFriend'){
+    $follower = $_POST['follower'];
+    $following = $_POST['following'];
+    $privacy = $_POST['privacy'];
+
+    if($privacy == 0){
+        $stmt = $conn->addFriend($follower, $following, 1, 1);
+        echo '1';
+    } elseif($privacy == 1){
+        $stmt = $conn->addFriend($follower, $following, 0, 0);
+        echo '0';
+    } else{
+        echo 'Ha ocurrido un error';
+    }
+}  else if($_GET['type'] == 'deleteFriend'){
+    if(isset($_POST['follower']) && isset($_POST['following'])){
+        $follower = $_POST['follower'];
+        $following = $_POST['following'];
+    
+        $stmt = $conn->deleteFriend($follower, $following);
+        print_r($stmt);
+    }
+} else if($_GET['type'] == 'countFollowers'){
+    if(isset($_POST['username'])){
+        $username = $_POST['username'];
+
+        $stmt = $conn->countFollowers($username);
+        echo json_encode($stmt);
+    }
+} else if($_GET['type'] == 'countFollowing'){
+    if(isset($_POST['username'])){
+        $username = $_POST['username'];
+
+        $stmt = $conn->countFollowing($username);
+        echo json_encode($stmt);
+    }
 }
 
 ?>

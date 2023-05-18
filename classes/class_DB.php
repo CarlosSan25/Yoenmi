@@ -191,6 +191,42 @@ class DB{
         $stmt = $this->conn->prepare($query);
         if($stmt->execute()){return "true";} else {return "false";}
     }
+
+    public function addFriend($follower, $following, $formalised, $viewed){
+        $query = "INSERT INTO friends (follower, following, formalised, viewed) VALUES ('$follower','$following', '$formalised', '$viewed');";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
+
+    public function deleteFriend($follower, $following){
+        $query = "DELETE FROM friends WHERE follower = '$follower' AND following = '$following';";
+        $stmt = $this->conn->prepare($query);
+        if($stmt->execute()){return true;} else {return false;}
+    }
+
+    public function checkPrivacy($username){
+        $query = "SELECT private FROM users WHERE username = '$username';";
+        $result = $this->query($query);
+        return $result;
+    }
+
+    public function checkFollow($follower, $following){
+        $query = "SELECT * FROM friends WHERE follower = '$follower' AND following = '$following';";
+        $result = $this->query($query);
+        return $result;
+    }
+
+    public function countFollowers($following){
+        $query = "SELECT count(follower) FROM friends WHERE following = '$following' AND formalised = '1';";
+        $result = $this->query($query);
+        return $result;
+    }
+
+    public function countFollowing($follower){
+        $query = "SELECT count(following) FROM friends WHERE follower = '$follower' AND formalised = '1';";
+        $result = $this->query($query);
+        return $result;
+    }
 }
 
 ?>

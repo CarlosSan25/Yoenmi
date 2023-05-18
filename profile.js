@@ -30,6 +30,28 @@ $.ajax('controllers/user.php?type=getData',{
     if(result['private'] == 1 && $("#profile-username").text().replace('@','') != getCookie('usuario')){
         $("#posts").append("<h1 style='text-align:center; margin-top: 30px;'>&#9940;Esta cuenta es privada&#9940;</h1>");
     }
+
+    $.ajax("controllers/user.php?type=countFollowers",{
+        method: 'POST',
+        type: 'json',
+        data: {'username' : username}
+    }).then(function(count){
+        let count_parsed = JSON.parse(count);
+        let followers = count_parsed['count(follower)'];
+        $("#followers").text(followers+" seguidores");
+    })
+
+    $.ajax("controllers/user.php?type=countFollowing",{
+        method: 'POST',
+        type: 'json',
+        data: {'username' : username}
+    }).then(function(count){
+        console.log(count);
+        let count_parsed = JSON.parse(count);
+        let following = count_parsed['count(following)'];
+        $("#following").text(following+" siguiendo");
+    })
+
 }).then(function(){
 function userPosts(){
     let user_id = $("#profile-avatar").attr('data-id');
@@ -733,4 +755,6 @@ function userPosts(){
             $("#profile-banner").children().remove();
         } );
     }
+
+
 });

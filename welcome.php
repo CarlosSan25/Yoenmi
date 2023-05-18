@@ -130,16 +130,16 @@ require('header.php');
                             <img src="<?php echo $response->current->condition->icon; ?>" alt="">
                             <div class="temp"><?php echo $response->current->temp_c; ?>º</div>
                             <div class="locat"><?php echo $response->location->name ?></div>
-                            <div style="width: 100%; font-size: 20px;" class="mt-3 d-flex justify-content-around">
-                                <div class="wind d-flex flex-column" style="align-items: center;">
+                            <div class="wind-humidity-precipitation mt-3 d-flex justify-content-around">
+                                <div class="wind d-flex" style="align-items: center;">
                                     <span>Wind Now</span>
                                     <span><?php echo $response->current->wind_mph ?> m/h</span>
                                 </div>
-                                <div class="wind d-flex flex-column" style="align-items: center;">
+                                <div class="humidity d-flex" style="align-items: center;">
                                     <span>Humidity</span>
                                     <span><?php echo $response->current->humidity ?></span>
                                 </div>
-                                <div class="wind d-flex flex-column" style="align-items: center;">
+                                <div class="precipitation d-flex" style="align-items: center;">
                                     <span>Precipitation</span>
                                     <span><?php echo $response->current->precip_in ?> %</span>
                                 </div>

@@ -1,10 +1,12 @@
-    // Funcion para leer las cookies
-    function getCookie(name) {
-        let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-        ));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
+// Funcion para leer las cookies
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+let user_username = $(".username")[0].innerHTML.slice(1);
 
 $(document).ready(function(){
 
@@ -99,6 +101,40 @@ $(document).ready(function(){
                 $('#'+post['ID']).append('<div style="position:relative; justify-content: center;" class="d-flex"><iframe width="800" height="400" style="border:0; border-radius: 5px;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCltQyssN-m8du_s3jHNjo3OjOar66Xg_s&q='+post['map']+'"></iframe></div>');
             }
 
+            if(post['username'] != user_username){
+                let follower = user_username;
+                let following = post['username'];
+                let this_post = post['ID'];
+                $.ajax( "controllers/user.php?type=checkFollow", {
+                    async: false,
+                    type: 'POST',
+                    dataType: 'text',
+                    data: {'follower' : follower,
+                            'following' : following}
+                }).then(function(respuesta){
+                    respuesta = JSON.parse(respuesta);
+
+                    if(respuesta['formalised'] == '1' && respuesta['viewed'] == '1'){
+                        $('#'+this_post+" .user_and_date div.user-info").append("<div data-id='"+this_post+"' class='addFriend_button friendDone'>✔</div>");
+                    } else if(respuesta['formalised'] == '0' && respuesta['viewed'] == '0'){
+                        $('#'+this_post+" .user_and_date div.user-info").append("<div data-id='"+this_post+"' class='addFriend_button friendSend'>✔</div>");
+                    } else{
+                        $('#'+this_post+" .user_and_date div.user-info").append("<div data-id='"+this_post+"' class='addFriend_button'>+</div>");
+                    }
+
+                    $(".addFriend_button").off();
+                    $(".addFriend_button").on('click', function(event){
+                        event.preventDefault();
+                        post_id = $(this).attr('data-id');
+                        if($(this).hasClass('friendDone') || $(this).hasClass('friendSend')){
+                            unfollow(post_id);
+                        } else{
+                            follow(post_id);
+                        }
+                    })
+                })
+            }
+
             // If the post is liked by the current user, add correpondent class
             if(post['liked'] == 1){
                 liked_class = 'liked';
@@ -170,7 +206,7 @@ $(document).ready(function(){
             $("#form-"+post_id).slideUp('fast');
         }else if($("#form-"+post_id).is(':hidden')){
             $("#form-"+post_id).slideDown('fast');
-        }
+        }})
 
         $("img.url-comment").on("click", function(){
             $("#add_url").attr("data-type","comment");
@@ -259,9 +295,7 @@ $(document).ready(function(){
                 $('#form-'+post_id+' .alert-comm').show();
             }
         })
-        })
     })
-
     }
 
     loadPosts();
@@ -586,7 +620,40 @@ $(document).ready(function(){
                         } else if(post['map'].length > 0){
                             $('#'+post['ID']).append('<div style="position:relative; justify-content: center;" class="d-flex"><iframe width="800" height="400" style="border:0; border-radius: 5px;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCltQyssN-m8du_s3jHNjo3OjOar66Xg_s&q='+post['map']+'"></iframe></div>');
                         }
-            
+                        
+                        if(post['username'] != user_username){
+                            let follower = user_username;
+                            let following = post['username'];
+                            let this_post = post['ID'];
+                            $.ajax( "controllers/user.php?type=checkFollow", {
+                                type: 'POST',
+                                dataType: 'text',
+                                data: {'follower' : follower,
+                                        'following' : following}
+                            }).then(function(respuesta){
+                                respuesta = JSON.parse(respuesta);
+
+                                if(respuesta['formalised'] == '1' && respuesta['viewed'] == '1'){
+                                    $('#'+this_post+" .user_and_date div.user-info").append("<div data-id='"+this_post+"' class='addFriend_button friendDone'>✔</div>");
+                                } else if(respuesta['formalised'] == '0' && respuesta['viewed'] == '0'){
+                                    $('#'+this_post+" .user_and_date div.user-info").append("<div data-id='"+this_post+"' class='addFriend_button friendSend'>✔</div>");
+                                } else{
+                                    $('#'+this_post+" .user_and_date div.user-info").append("<div data-id='"+this_post+"' class='addFriend_button'>+</div>");
+                                }
+
+                                $(".addFriend_button").off();
+                                $(".addFriend_button").on('click', function(event){
+                                    event.preventDefault();
+                                    post_id = $(this).attr('data-id');
+                                    if($(this).hasClass('friendDone') || $(this).hasClass('friendSend')){
+                                        unfollow(post_id);
+                                    } else{
+                                        follow(post_id);
+                                    }
+                                })
+                            })
+                        }
+
                         // If the post is liked by the current user, add correpondent class
                         if(post['liked'] == 1){
                             liked_class = 'liked';
@@ -666,4 +733,106 @@ $(document).ready(function(){
     /////////////////
 
     $("#sugerencias-amistad").append("<div>Aqui irán las sugerencias de amistad varias.</div>");
+
+    function follow(post_id){
+        var following = $.trim($('#'+post_id+' span.username').text().replace('@', ''));
+        this_button = $('#'+post_id+' .addFriend_button');
+        $.ajax( "controllers/user.php?type=checkPrivacy", {
+            type: 'POST',
+            dataType: 'text',
+            data: {'username' : following}
+        }).then(function(privacy_result){
+            let privacy = JSON.parse(privacy_result)['private'];
+            var follower = user_username;
+            if(follower != '' && following != ''){
+                $.ajax( "controllers/user.php?type=addFriend", {
+                    type: 'POST',
+                    dataType: 'text',
+                    data: {'follower' : follower,
+                            'following' : following,
+                            'privacy' : privacy}
+                }).then(function(respuesta){
+                    if(respuesta == 1){
+                        $("#alert-success").text('Amigo añadido.');
+                        $("#alert-success").show('slow');
+                        setTimeout(function(){
+                            $("#alert-warning").hide('slow');
+                            $("#alert-warning").text('');
+                        }, 3000);
+                        $("#posts>.post").each(function(){
+                            this_username = $(this).find('.username').text().replace('@', '');
+                            if( $.trim(this_username) == following){
+                                $(this).find('.addFriend_button').addClass('friendDone');
+                                $(this).find('.addFriend_button').text('✔');
+                            }
+                        })
+                    } else if(respuesta == 0){
+                        $("#alert-success").text('Solicitud enviada.');
+                        $("#alert-success").show('slow');
+                        setTimeout(function(){
+                            $("#alert-success").hide('slow');
+                            $("#alert-success").text('');
+                        }, 3000);
+                        $("#posts>.post").each(function(){
+                            this_username = $(this).find('.username').text().replace('@', '');
+                            if( $.trim(this_username) == following){
+                                $(this).find('.addFriend_button').addClass('friendSend');
+                                $(this).find('.addFriend_button').text('✔');
+                            }
+                        })
+                    }
+                })
+            } else{
+                $("#alert-danger").text('Ha ocurrido un error.');
+                $("#alert-danger").show('slow');
+                setTimeout(function(){
+                    $("#alert-danger").hide('slow');
+                    $("#alert-danger").text('');
+                }, 3000);
+            }
+        })
+    }
+
+    function unfollow(post_id){
+        var following = $.trim($('#'+post_id+' span.username').text().replace('@', ''));
+        var follower = user_username;
+        $.ajax( "controllers/user.php?type=deleteFriend", {
+            type: 'POST',
+            dataType: 'text',
+            data: {'follower' : follower,
+                    'following' : following}
+        }).then(function(respuesta){
+            if(respuesta){
+                $("#posts>.post").each(function(){
+                    this_username = $(this).find('.username').text().replace('@', '');
+                    if( $.trim(this_username) == following){
+
+                        let btn = $(this).find('.addFriend_button');
+
+                        if(btn.hasClass('friendSend')){
+                            btn.removeClass('friendSend');
+                        } else if(btn.hasClass('friendDone')){
+                            btn.removeClass('friendDone');
+                        }
+                        
+                        $(this).find('.addFriend_button').text('+');
+                    }
+                })
+                $("#alert-success").text('Has dejado de seguir a '+following+".");
+                $("#alert-success").show('slow');
+                setTimeout(function(){
+                    $("#alert-success").hide('slow');
+                    $("#alert-success").text('');
+                }, 3000);
+            } else{
+                $("#alert-danger").text('Ha ocurrido un error');
+                $("#alert-danger").show('slow');
+                setTimeout(function(){
+                    $("#alert-danger").hide('slow');
+                    $("#alert-danger").text('');
+                }, 3000);
+            }
+        })
+
+    }
 });

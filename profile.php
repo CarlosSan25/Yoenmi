@@ -27,8 +27,8 @@ require("profile-header.php");
                 </div>
                 <div class="d-flex" style="margin-top: 20px;align-items: start;gap:10px;padding: 0px 47px;"><img width="20px" src='media\calendario.svg' class='ico'><span id="profile-user-date"></span></div>
                 <div class="d-flex" style="border-bottom: 1px solid grey;font-size: 20px;align-items: start;gap:30px;padding: 30px 47px;">
-                    <div>185 Siguiendo</div>
-                    <div>562 Seguidores</div>
+                    <div id='following'></div>
+                    <div id='followers'></div>
                 </div>
             </div>
             <div id="posts" class="posts"></div>

@@ -576,6 +576,7 @@ window.onload = function(){
         if($("#edit-post>span")){
             $("#edit-post>span").remove();
         }
+
         $("#edit-post").append("<span style='display:none;' value='"+post_id+"' />")
         $("#edit-post").modal({
             escapeClose: false,
