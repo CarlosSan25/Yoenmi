@@ -72,6 +72,10 @@ body{
   overflow-x: hidden;
 }
 
+.w-33{
+  width: 33% !important;
+}
+
 form{
   gap: 15px;
   width: 70%;
@@ -97,6 +101,14 @@ input{
   border-radius: 5px;
 }
 
+#ojo-pass{
+  margin: 5px;
+  position: absolute;
+  cursor: pointer;
+  right: 0;
+  align-self: center;
+}
+
 .menu-item>a:hover{
     color: black;
 }
@@ -105,9 +117,11 @@ input{
 }
 
 .inputwfoto{
+  position: relative;
   width: 100%;
   background: white;
   border-radius: 5px;
+  display: flex;
 }
 
 .password{
@@ -123,7 +137,6 @@ input{
   top: 0;
   height: 100vh;
   left: 0;
-  width: 25%;
   z-index: 9999;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 0px 20px 20px 0px;
@@ -594,6 +607,7 @@ a:link, a:visited, a:active {
 .locat{
   font-size: 45px;
   line-height: 75px;
+  text-align: center;
 }
 
 .logo-text:hover{
@@ -830,7 +844,7 @@ output{
 
 .output-images, .grid4, .grid3, .grid2{
   display: grid;
-  grid-template-columns: 400px 400px;
+  grid-template-columns: 21vw 21vw;
   grid-template-rows: auto;
   gap: 10px;
   padding: 20px;
@@ -851,7 +865,7 @@ output{
 }
 
 .output-image, .grid4-img, .grid3-img, .grid2-img{
-  width: 400px;
+  width: 21vw;
   height: 400px;
   background-size: cover;
   background-position: center;
@@ -887,7 +901,7 @@ output{
 
 .grid3-imgbot{
   grid-column: 1/2;
-  width: 810px;
+  width: 42.5vw;
   background-position: center;
 }
 
@@ -1125,6 +1139,15 @@ a#likes:hover{
   background-color: rgb(255, 166, 0);
 }
 
+.menu-phone{
+  display: none;
+}
+
+.menu-phone .active{
+  filter: drop-shadow(2px 1px 1px cyan);
+  background-color: transparent;
+}
+
 /* Media queries */
 
 @media (max-width: 1385px) {
@@ -1135,6 +1158,9 @@ a#likes:hover{
     flex-direction: row !important;
     justify-content: center;
     gap: 20px;
+  }
+  #register{
+    width: 45% !important;
   }
 }
 
@@ -1167,6 +1193,53 @@ a#likes:hover{
   .top-right{
     display: inline !important;
   }
+  .background .row{
+    display: none;
+  }
+  .login{
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    height: fit-content;
+    width: 45% !important;
+  }
+  .phone-logo{
+    display: flex !important;
+    height: fit-content;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 1px 1px 1px black;
+  }
+  .phone-logo>img{
+    width: 160px;
+  }
+  .phone-logo>h3{
+    font-size: 40px;
+    color: white;
+  }
+  .login>h1{
+    display: none;
+  }
+  #register{
+    width: 70% !important;
+    top: 48% !important;
+  }
+  #register .user_and_pass{
+    flex-direction: row !important;
+  }
+  .user_and_pass>div{
+    width: 50%;
+  }
+  .output-images, .grid4, .grid3, .grid2{
+    grid-template-columns: 32vw 32vw;
+  }
+  .output-image, .grid4-img, .grid3-img, .grid2-img{
+    width: 32vw;
+  }
+  .grid3-imgbot{
+    width: 65vw;
+  }
 }
 
 @media (max-width: 899px){
@@ -1196,5 +1269,41 @@ a#likes:hover{
   .grid2>img{
     max-height: 40vw;
     max-width: 40vw;
+  }
+  .output-image, .grid4-img, .grid3-img, .grid2-img{
+    width: 40vw;
+  }
+  .grid3-imgbot{
+    width: 81vw;
+  }
+  .menu-phone{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    position: sticky;
+    bottom: 10px;
+    background-color: black;
+    padding: 15px;
+    top: 93vh;
+    z-index: 99;
+  }
+  a.scroll-top{
+    bottom: 85px;
+  }
+}
+
+@media (max-width: 699px){
+  .login, #register{
+    width: 85% !important;
+  }
+  .top>div:not(.ajustes){
+    display: none !important;
+  }
+  .top>div:last-child{
+    display: inline !important;
+    filter: invert(1);
+  }
+  .top>input{
+    width: 60%;
   }
 }

@@ -699,4 +699,22 @@ window.onload = function(){
         $("#cerrar-ubic-modal").click(function(){
             $.modal.close();
         });
+
+        var lastScrollTop = 0, delta = 5;
+        $(window).scroll(function(){
+            if(window.innerWidth < 800){
+                var st = $(this).scrollTop();
+                if(Math.abs(lastScrollTop - st) >= delta){
+                    if (st > lastScrollTop){
+                        $(".menu-phone").slideDown("slow");
+                        $(".menu-phone").show("slow");
+                        $(".menu-phone").attr('style','display:flex !important;');
+                    } else {
+                        $(".menu-phone").slideUp("slow");
+                        $(".menu-phone").hide("slow");
+                    }
+                }
+                lastScrollTop = st;
+            }
+        });
 }

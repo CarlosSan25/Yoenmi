@@ -28,9 +28,10 @@ if($input_username == NULL || $input_password == NULL){
             }
             session_start();
             $data = $conn->getUserData($input_username);
+            $test = $conn->setUserOnline($data['ID']);
             $_SESSION['name'] = $data['Nombre'];
             $_SESSION['image'] = $data['avatar'];
-            $_SESSION['id'] = $data['id'];
+            $_SESSION['id'] = $data['ID'];
             header("Location: ../welcome.php");
         } else{
             $error="Contraseña incorrecta.";

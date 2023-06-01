@@ -52,6 +52,19 @@ class DB{
         return $stmt->execute();
     }
 
+    public function setUserOnline($id){
+        $query = "UPDATE `users` SET `online` = '1' WHERE `users`.`ID` = $id;";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
+
+    public function setUserOffline($id){
+        $query = "UPDATE `users` SET `online` = '0' WHERE `users`.`ID` = $id;";
+        //$stmt = $this->conn->prepare($query);
+        //return $stmt->execute();
+        return $id;
+    }
+
     public function userExists($username){
         $query = "SELECT username FROM users WHERE username='$username';";
         $result = $this->query($query);

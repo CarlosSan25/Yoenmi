@@ -33,7 +33,12 @@ if(isset($_COOKIE["usuario"])){
     <a href="#" class="scroll-top" title="Ir arriba">
         <img src="media/up.png" height="20px;"></img>
     </a>
-    <div class="row">
+    <div class="menu-phone">
+        <div class="user profile-pic" style="background-image:url('<?php echo $_SESSION['image']; ?>')"></div>
+        <div id="home" class="d-flex"><img width="30" class="ico" src="media\hogar.svg"></div>
+        <div id="explore" class="d-flex"><img width="30" class="ico" src="media\globo.svg"></div>
+    </div>
+    <div class="row" style="width:100%;">
         <div class="col-3 flex-column left-side" style="padding: 30px;">
             <div class="d-flex flex-column" style="gap: 20px; width: 22vw; position:fixed;">
                 <div class="logo">
@@ -81,7 +86,7 @@ if(isset($_COOKIE["usuario"])){
                     </div>
                 </div>
                 <div class="col-1"></div>
-                <div class="col-1 top-right">
+                <div class="col-1 top-right ajustes">
                     <div class="dropdown-toggle" style="width:45px;cursor:pointer;">
                             <img class="ico" src="media\ajustes.png" alt="">
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -90,5 +95,8 @@ if(isset($_COOKIE["usuario"])){
                             <li><a class="dropdown-item" href="session_close.php" style="color:red !important;">Cerrar Sesión</a></li>
                         </ul>
                     </div>
+                </div>
+                <div class="col-1" style="display:none;">
+                    <img src="media\menu-hamburguesa.png">
                 </div>
             </div>
