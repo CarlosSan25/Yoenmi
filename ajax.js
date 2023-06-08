@@ -43,47 +43,48 @@ $(document).ready(function(){
                 data: {'user_id' : user_id}
     }).then(function(respuesta){
         console.log(respuesta);
-        // Get the color_mode cookie & display posts with the correspondent class
-        let cook = getCookie("color_mode");
-        for(var post of respuesta){
-                
-            let color_class;
-            let coment_color_class;
-            let liked_class;
+        if(respuesta.length > 0){
+            // Get the color_mode cookie & display posts with the correspondent class
+            let cook = getCookie("color_mode");
+            for(var post of respuesta){
+                    
+                let color_class;
+                let coment_color_class;
+                let liked_class;
 
-            // Format date got from the DB in posts
-            fecha = new Date(post['date']);
-            const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
-            var minutes;
-            if(fecha.getMinutes() < 10){minutes = "0"+fecha.getMinutes();} else {minutes = fecha.getMinutes();}
-            var date = fecha.getDate()+" de "+meses[fecha.getMonth()]+" a las "+fecha.getHours()+":"+minutes;
+                // Format date got from the DB in posts
+                fecha = new Date(post['date']);
+                const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
+                var minutes;
+                if(fecha.getMinutes() < 10){minutes = "0"+fecha.getMinutes();} else {minutes = fecha.getMinutes();}
+                var date = fecha.getDate()+" de "+meses[fecha.getMonth()]+" a las "+fecha.getHours()+":"+minutes;
 
-            if(cook == "dark"){
-                color_class = "post-dark";
-                comment_color_class = 'rgb(26 30 45)';
+                if(cook == "dark"){
+                    color_class = "post-dark";
+                    comment_color_class = 'rgb(26 30 45)';
 
-            } else if(cook == "light" || cook == null){
-                color_class = "post-light";
-                comment_color_class = 'rgb(13 87 151 / 65%)';
-            }
+                } else if(cook == "light" || cook == null){
+                    color_class = "post-light";
+                    comment_color_class = 'rgb(13 87 151 / 65%)';
+                }
 
-            if(post['content'].includes('[url=')){
-                url = post['content'].split('[url=')[1].split("]")[0];
-                
-                let text = post['content'].split(']')[1].split('[')[0];
-                let regex = /\[url=.*\]/g;
-                let contenido = post['content'].replace(regex,'<a target="_blank" href="'+ url +'">');
-                contenido = contenido.split('>')
-                contenido[0] += '>'+text+'</a>';
-                post['content'] = contenido.join("");
-            }
+                if(post['content'].includes('[url=')){
+                    url = post['content'].split('[url=')[1].split("]")[0];
+                    
+                    let text = post['content'].split(']')[1].split('[')[0];
+                    let regex = /\[url=.*\]/g;
+                    let contenido = post['content'].replace(regex,'<a target="_blank" href="'+ url +'">');
+                    contenido = contenido.split('>')
+                    contenido[0] += '>'+text+'</a>';
+                    post['content'] = contenido.join("");
+                }
 
-            let edited = '';
-            if(post['edited'] == 1){
-                edited = "<small style='margin-right: 5px;'>edited on</small>";
-            } else{
-                edited = '';
-            }
+                let edited = '';
+                if(post['edited'] == 1){
+                    edited = "<small style='margin-right: 5px;'>edited on</small>";
+                } else{
+                    edited = '';
+                }
 
             // Append each post
             $('#posts').append("<div id='"+post['ID']+"' class='d-flex flex-column post " + color_class + "'></div>");
@@ -197,6 +198,9 @@ $(document).ready(function(){
                     }
                 }
             }
+            }
+        } else{
+            $('#posts').append('<div class="d-flex align-items-center flex-column"><h2>No hay posts por cargar...</h2><a href="explore.php"><h3>¡Explora!</h3></a><div>')
         }
             
         // Post comments dropdown

@@ -122,6 +122,8 @@ function userPosts(){
                 $('#'+post['ID']).append("<div class='grid2'><div id='img-slide' class='grid2-img' data-order='1' style='background-image: url("+post['image']+")'></div><div id='img-slide' class='grid2-img' data-order='2' style='background-image: url("+post['image2']+")'></div></div>");
             } else if(post['image2'].length < 1 && post['image'].length > 0){
                 $('#'+post['ID']).append("<div class='grid1'><div id='img-slide' class='grid1-img' data-order='1' style='background-image: url("+post['image']+")'></div></div>");
+            } else if(post['map'].length > 0){
+                $('#'+post['ID']).append('<div style="position:relative; justify-content: center;" class="d-flex"><iframe width="800" height="400" style="border:0; border-radius: 5px;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCltQyssN-m8du_s3jHNjo3OjOar66Xg_s&q='+post['map']+'"></iframe></div>');
             }
 
             // If the post is liked by the current user, add correpondent class
@@ -135,8 +137,7 @@ function userPosts(){
             $('#'+post['ID']+' #count').append("<div class='likes-count "+liked_class+"'><a class='comments-button' style='cursor: pointer;'><span id='comments-count'>"+post['count-comm']+"</span><span> Comment</span></a></div>");
 
             $('#'+post['ID']).append("<div style='gap:10px; align-items: center;position:relative;' id='likes-com' class='d-flex'><div class='like "+liked_class+"'><img class='pulgar' height=20px src='media/like.png'></div></div>");
-
-            if(post['username'] == user_username){
+            if(post['username'] == user_username.replace('@', '')){
                 $('#'+post['ID']+' #likes-com').append("<div class='edit-delete-buttons'><div class='delete-post-button'><img height=20px src='media/delete.png'></div><div class='edit-post-button'><img height=20px src='media/edit.png'></div></div>");
             }
 

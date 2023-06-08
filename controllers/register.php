@@ -26,8 +26,12 @@ if($input_username == NULL || $input_password == NULL || $input_name == NULL || 
     if(!$conn->userExists($input_username)){
         
         $input_images[0] = $input_image;
-        $input_images[1] = $input_banner;
-        $error;
+
+        if(!empty($input_banner)){
+            $input_images[1] = $input_banner;
+        };
+
+        $error = '';
         $count = 0;
         foreach ($input_images as $input_image) {
             // Obtain the extension of the image

@@ -73,20 +73,19 @@ if($_GET['type'] == 'post'){
                     $ap_images[$i] = "http://localhost/yoenmi/media/user-uploads/" . date('d.m.Y.H.i.s') . "[" . $i . "]" . "." . end($new_name);
                     
                     // Store the image in the server
-                    if(move_uploaded_file($input_image['tmp_name'][$i], $p_images[$i])){
-                        $stmt = $conn->insertPost($user_id, $input_content, $ap_images[0], $ap_images[1], $ap_images[2], $ap_images[3], '');
-                        if($stmt){
-                            $success="Post publicado con foto.";
-                            header("Location: ".$backPage."?success=$success");
-                        }else{
-                            $error="Ha habido un error, por favor, inténtelo de nuevo.";
-                            header("Location: ".$backPage."?error=$error&content=$input_content");
-                        }
-                            // Store the post in the DB
-                    } else {
+                    if(!move_uploaded_file($input_image['tmp_name'][$i], $p_images[$i])){
                         $error = "Ha habido un error al subir la imagen. Por favor, inténtalo de nuevo.";
-                    header("Location: ".$backPage."?error=$error");
+                        header("Location: ".$backPage."?error=$error");
                     }
+                }
+
+                $stmt = $conn->insertPost($user_id, $input_content, $ap_images[0], $ap_images[1], $ap_images[2], $ap_images[3], '');
+                if($stmt){
+                    $success="Post publicado con foto.";
+                    header("Location: ".$backPage."?success=$success");
+                }else{
+                    $error="Ha habido un error, por favor, inténtelo de nuevo.";
+                    header("Location: ".$backPage."?error=$error&content=$input_content");
                 }
             } else{
                 header("Location: ".$backPage."?error=$error");

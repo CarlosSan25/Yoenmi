@@ -50,6 +50,14 @@ window.onload = function(){
         see_likes.forEach(function(element){
             element.style.filter = 'invert(1)';
         });
+
+        $("#sugerencias-amistad").css({
+            'color':'white',
+            'border-color': 'white',
+        });
+        $(".user").css({
+            'color':'white',
+        })
         checkbox.checked = true;
     } else if(cookie == 'light' || cookie == null){
         body[0].style.backgroundColor = "white";
@@ -77,6 +85,13 @@ window.onload = function(){
         see_likes.forEach(function(element){
             element.style.filter = 'invert(0)';
         });
+        $("#sugerencias-amistad").css({
+            'color':'black',
+            'border-color': 'black',
+        });
+        $(".user").css({
+            'color':'black',
+        })
         checkbox.checked = false;
     }
 
@@ -111,6 +126,14 @@ window.onload = function(){
             comments.forEach(function(element){
                 element.style.backgroundColor = 'rgb(26 30 45)';
             });
+
+            $("#sugerencias-amistad").css({
+                'color':'white',
+                'border-color': 'white',
+            });
+            $(".user").css({
+                'color':'white',
+            })
         } else{
             body[0].style.backgroundColor = "white";
             body[0].style.color = "black";
@@ -141,6 +164,13 @@ window.onload = function(){
             comments.forEach(function(element){
                 element.style.backgroundColor = 'rgb(13 87 151 / 65%)';
             });
+            $("#sugerencias-amistad").css({
+                'color':'black',
+                'border-color': 'black',
+            });
+            $(".user").css({
+                'color':'black',
+            })
         }
     })
 
@@ -163,13 +193,11 @@ window.onload = function(){
         }
     })
 
-
-
-    $("#home").click(function(){
+    $(document).on("click", "#home", function () {
         $(location).attr('href','welcome.php');
     });
 
-    $("#explore").click(function(){
+    $(document).on("click", "#explore", function () {
         $(location).attr('href','explore.php');
     });
 
