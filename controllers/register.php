@@ -34,8 +34,8 @@ if($input_username == NULL || $input_password == NULL || $input_name == NULL || 
             $new_name = explode(".",$input_image['name']);
 
             // Make the path to the Database & for storage
-            $path = "../media/user-uploads/" . date('d.m.Y.H.i.s') . "." . end($new_name);
-            $absolute_path[$count] = "http://localhost/yoenmi/media/user-uploads/" . date('d.m.Y.H.i.s') . "." . end($new_name);
+            $path = "../media/user-uploads/" . date('d.m.Y.H.i.s') . "[". $count ."]" . "." . end($new_name);
+            $absolute_path[$count] = "http://localhost/yoenmi/media/user-uploads/" . date('d.m.Y.H.i.s') . "[". $count ."]" . "." . end($new_name);
 
             // Storage the images
             if($error != true){
